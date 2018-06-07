@@ -6,7 +6,7 @@
 # I got it from https://developer.arm.com/open-source/gnu-toolchain/gnu-rm/downloads
 # Its bin/ subdirectory must be in the search path
 
-STMLIB ?= $(TOPDIR)/../STM32F10x_StdPeriph_Lib_V3.5.0
+STMLIB ?= $(TOPDIR)/STM32F10x_StdPeriph_Lib_V3.5.0
 
 TOPDIR=../..
 
