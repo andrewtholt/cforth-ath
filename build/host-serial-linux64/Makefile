@@ -7,7 +7,7 @@ TOPDIR=../..
 CONFIG += -DBITS64
 CONFIG += -DFLOATING -DMOREFP
 
-LIBS += -lm
+LIBS += -lm -ldl
 
 FTDI = n
 ifeq ($(FTDI),y)

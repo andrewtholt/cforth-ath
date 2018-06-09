@@ -31,6 +31,7 @@ EXTENDSRC = $(APPPATH)/extend-$(API).c
 
 VPATH += $(APPPATH)
 INCS += -I$(APPPATH)
+CFLAGS += -DATH
 
 VPATH += $(TOPDIR)/src/lib
 INCS += -I$(TOPDIR)/src/lib

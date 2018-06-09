@@ -27,6 +27,9 @@ void glewInit(void) { }
 #include <GLFW/glfw3.h>
 #endif
 
+#ifdef ATH
+#include <dlfcn.h>
+#endif
 // #define BUFFERED_READ
 
 #ifdef BUFFERED_READ
@@ -469,6 +472,81 @@ void set_error_callback(void)
 }
 #endif
 
+#ifdef ATH
+#define MAX_PARAM 5
+
+struct params {
+    uint8_t returnCount;
+    uint8_t paramCount;
+
+    void *(*func)();
+    void *param[MAX_PARAM];
+} ;
+
+
+cell example1(cell a, cell b) {
+    printf("Example 1\n");
+
+//     params.returnCount = 1;
+//     params.paramCount = 2;
+//     params.param[0]=b;
+//     params.param[1]=a;
+
+//    return(a+b);
+    return(a+b);
+}
+
+/*
+void *athDlparams() {
+//    return &params;
+    return NULL;
+}
+*/
+
+void *athDlopen( int flags, int len, char *filename ) {
+    void *res=NULL;
+
+    filename[len]='\0';
+    res=dlopen(filename, flags);
+
+    return res;
+}
+
+/*
+void *athDlexec( struct params *ptr ) {
+//     printf("rc=%x\n",ptr->returnCount);
+//     printf("pc=%x\n",ptr->paramCount);
+//     printf("func=%lx\n",ptr->func);
+//     printf("p0=%x\n",ptr->param[0]);
+//     printf("p1=%x\n",ptr->param[1]);
+
+     if( ptr->returnCount == 0 ) {
+         switch(ptr->paramCount) {
+             case 0:
+                 break;
+             case 1:
+                 (ptr->func)(ptr->param[0]);
+                 break;
+         }
+     }
+}
+*/
+
+void *athDlsym(void *handle, int len, char *name) {
+    void *func=NULL;
+
+    name[len]='\0';
+    
+    func = dlsym(handle, name );
+
+    return func;
+}
+
+void athDlclose( void *lib) {
+    (void) dlclose( lib );
+}
+#endif
+
 cell ((* const ccalls[])()) = {
   // OS-independent functions
   C(ms)                //c ms             { i.ms -- }
@@ -521,7 +599,6 @@ cell ((* const ccalls[])()) = {
   // Miscellaneous
   C(open_scanner)      //c open-scanner   { -- i.fd }
   C(system)            //c system         { $ -- }
-
 #ifdef USE_FTDI
   // FTDI bit-banging
   C(ft_open_serial)    //c ft-open-com    { i.pid i.index -- i.handle }
@@ -568,6 +645,15 @@ cell ((* const ccalls[])()) = {
   C(libusb_control_transfer) //c libusb_control_transfer { i.timeout i.len a.data i.windex i.wvalue i.request i.reqtype a.handle -- h.nbytes }
   C(libusb_bulk_transfer) //c libusb_bulk_transfer { i.timeout a.actual i.len a.data i.ep a.handle -- h.err }
   C(libusb_interrupt_transfer) //c libusb_interrupt_transfer { i.timeout a.actual i.len a.data i.ep a.handle -- h.err }
+#endif
+// ATH
+#ifdef ATH
+C(example1)    //c sum { i.a i.b -- i.sum }
+C(athDlopen)   //c dlopen { a.name i.len i.flag -- a.lib }
+C(athDlsym)    //c dlsym  { a.name i.len i.lib -- a.func }
+// C(athDlexec)    //c dlexec  { a.struct -- a.func }
+// C(athDlparams) //c dl-params { -- a.p }
+C(athDlclose)  //c dlclose { a.lib -- }
 #endif
 
 #ifdef OPENGL

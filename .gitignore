@@ -11,6 +11,7 @@
 *.bin
 *.zip
 *.tgz
+*.swp
 forth
 meta
 makebi
@@ -23,3 +24,5 @@ vars.h
 date.c
 version
 .DS_Store
+
+.goutputstream-VMWAKZ
