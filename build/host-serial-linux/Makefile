@@ -11,7 +11,8 @@ endif
 FTDI = n
 ifeq ($(FTDI),y)
 INCS += $(shell pkg-config --cflags libusb-1.0)
-LIBS += $(shell pkg-config --libs libusb-1.0)
+LIBS += $(shell pkg-config --libs libusb-1.0) 
 endif
+LIBS += -lm -ldl
 
 include $(TOPDIR)/src/app/host-serial/targets.mk
