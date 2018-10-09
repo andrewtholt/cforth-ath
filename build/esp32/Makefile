@@ -14,11 +14,12 @@ CC := gcc
 
 # Change these to reflect the locations of external stuff on your system,
 # either here or on the command line
-XTGCCPATH ?= /c/msys32/opt/xtensa-esp32-elf/bin/
+ESP_TOP = /home/andrewh/esp
+XTGCCPATH ?= $(ESP_TOP)/xtensa-esp32-elf/bin/
 CROSS ?= $(XTGCCPATH)xtensa-esp32-elf-
 
 # ESP32 SDK
-IDF_PATH ?= $(TOPDIR)/../esp-idf
+# IDF_PATH ?= $(TOPDIR)/../esp-idf
 
 CFORTH_PATH ?= $(abspath $(TOPDIR)/build/esp32)
 
