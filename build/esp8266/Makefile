@@ -1,6 +1,7 @@
 # Builds CForth for ESP8266
 
-TOPDIR=../..
+TOPDIR=$(HOME)/Source/Forth/cforth
+# TOPDIR=../..
 
 # CONFIG += -DBITS32 -DT16
 CONFIG += -DBITS32
@@ -16,6 +17,6 @@ CROSS ?= $(XTGCCPATH)xtensa-lx106-elf-
 NODEMCU_PARENT_PATH ?= $(TOPDIR)/../
 NODEMCU_PATH ?= $(NODEMCU_PARENT_PATH)nodemcu-firmware
 SDK_VER:=1.5.4.1
-COMPORT ?= COM36
+COMPORT ?= /dev/ttyUSB0
 
 include $(TOPDIR)/src/app/esp8266/targets.mk

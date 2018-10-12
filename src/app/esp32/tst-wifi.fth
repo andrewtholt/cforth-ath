@@ -1,3 +1,28 @@
+:noname " HoltAtHome4" ; to wifi-sta-ssid
+:noname " anthony050192" ; to wifi-sta-password
+
+wifi-sta-on
+
+fl ../../cforth/printf.fth
+#100 buffer: abort-msg
+
+: sprintf-abort  ( ? pattern$ -- )
+   sprintf abort-msg pack  'abort$ !
+   -2 throw
+;
+
+\needs wbsplit  : wbsplit  ( w -- b.low b.high )  ;
+\needs be-w! : be-w!  ( w adr -- )  >r  wbsplit r@ c! r> 1+ c!  ;
+
+: ?posix-err  ( n -- )
+   0<  if
+      \ EALREADY is not really a problem
+      errno  dup #114 =  if  drop exit  then
+      dup >r strerror cscount r>
+      " Syscall error %d: %s" sprintf-abort
+   then
+;
+
 \ test-socket.fth
 \ Example code for using client sockets
 \ Connects to an SSH server (port 22) on localhost (127.0.0.1)
@@ -30,7 +55,8 @@
 ;
 
 create host #127 c, 0 c, 0 c, 1 c,
-#22 constant port
+\ #22 constant port
+#8080 constant port
 
 : probe-ssh  ( -- )
    open-socket

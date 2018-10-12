@@ -18,7 +18,7 @@ FTDI = y
 INCS += $(shell pkg-config --cflags libusb-1.0)
 LIBS += $(shell pkg-config --libs libusb-1.0)
 
-MYOBJS += glops.o
+# MYOBJS += glops.o
 
 forth.o: glops.h
 
