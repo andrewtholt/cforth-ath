@@ -1,0 +1,12 @@
+
+Set the following environment variables, and then rum mkConnect.sh.
+
+his will display a small code fragment containing the commands to connect 
+to a wifi basestation
+
+WIFI_BASE the name of the basestation
+SIFI_PASSWORD the password.
+
+If this looks OK, run th ecommand again and redirect 
+the output to connect.fth
+
