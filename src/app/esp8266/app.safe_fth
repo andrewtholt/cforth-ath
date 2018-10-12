@@ -7,11 +7,9 @@ fl ../../lib/ilog2.fth
 fl ../../lib/tek.fth
 
 warning @ warning off
-\ : bye standalone?  if  restart  then  bye  ;
-: bye ;
+: bye standalone?  if  restart  then  bye  ;
 warning !
-\ : ms  ( msecs -- )  start-ms rest  ;
-: ms  ( msecs -- )  drop ;
+: ms  ( msecs -- )  start-ms rest  ;
 
 : relax  ( -- )  1 ms  ;  \ Give the system a chance to run
 
@@ -29,8 +27,6 @@ alias m-init noop
    relax
    false
 ;
-
-: timer@ 0 ;
 alias get-ticks timer@
 : ms>ticks  ( ms -- ticks )  #1000 *  ;
 

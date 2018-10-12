@@ -29,12 +29,12 @@
    /sockaddr sockaddr socket-fd connect  ?posix-err
 ;
 
-create localhost #127 c, 0 c, 0 c, 1 c,
-#22 constant ssh-port
+create host #127 c, 0 c, 0 c, 1 c,
+#22 constant port
 
 : probe-ssh  ( -- )
    open-socket
-   localhost ssh-port connect-socket
+   host port connect-socket
    pad $100 socket-fd h-read-file  ( actual )
    dup ?posix-err                  ( actual )
    pad swap type                   ( )

@@ -24,5 +24,6 @@ vars.h
 date.c
 version
 .DS_Store
+cscope.out
 
 .goutputstream-VMWAKZ
