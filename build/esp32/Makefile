@@ -37,6 +37,8 @@ ifneq ($(COMPORT),)
 	ESPPORT_OVERRIDE = ESPPORT=$(COMPORT)
 endif
 
+ESPPORT_OVERRIDE=/dev/ttyUSB0
+
 flash: app.o
 	@IDF_PATH=$(IDF_PATH) CFORTH_PATH=$(CFORTH_PATH) $(ESPPORT_OVERRIDE) make --no-print-directory -C sdk_build flash
 
