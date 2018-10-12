@@ -32,6 +32,7 @@ alias get-ticks get-msecs
 : ms>ticks  ( ms -- ticks )  ;
 
 fl wifi.fth
+fl tcpnew.fth
 
 fl ../esp8266/xmifce.fth
 fl ../../lib/crc16.fth
