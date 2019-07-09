@@ -58,3 +58,59 @@ constant /ap-config
    endcase
    abort
 ;
+: ap-mode?  ( -- flag )  wifi-opmode@ 2 =  ;
+: wifi-config  ( -- adr )
+   pad ap-mode?  if
+      wifi-ap-config@ drop
+   else
+      wifi-sta-config@ drop
+   then
+   pad
+;
+\ Station config structure
+\ +0.b[32] is SSID
+\ +32.b[64] is password
+\ +96.b is bssid_set (0 to ignore bssid, 1 to match it)
+\ +97.b[6] is bssid
+
+\ AP config structure
+\ +0.b[32] is SSID
+\ +32.b[64] is password
+\ +96.b is ssid_len
+\ +97.b is channel
+\ +100.l is auth_mode
+\ +104.b is hidden
+\ +105.b is max_connection
+\ +106.w is beacon_interval
+: ssid$  ( -- $ )  wifi-config cscount #32 min ;
+: wifi-password$  ( -- $ )  wifi-config #32 + cscount  #64 min  ;
+: .ssid  ( -- )
+   ssid$ type
+;
+
+: ipaddr@  ( -- 'ip )
+   pad  ap-mode? 1 and  wifi-ip-info@ drop  pad
+;
+
+: (.d)  ( n -- )  push-decimal (.) pop-base  ;
+: .ipaddr  ( 'ip -- )
+   3 0 do  dup c@ (.d) type ." ." 1+  loop  c@ (.d) type
+;
+: .ip/port  ( adr -- )
+   dup 0=  if  drop ." (NULL)" exit  then
+   ." Local: " dup 2 la+ .ipaddr ." :" dup 1 la+ l@ .d
+   ." Remote: " dup 3 la+ .ipaddr ." :" l@ .d
+;
+0 [if]
+: .conntype  ( n -- )
+   case  0 of  ." NONE"  endof  $10 of  ." TCP" endof  $20 of ." UDP" endof  ( default ) dup .x endcase
+;
+: .connstate  ( n -- )
+   case  0 of ." NONE" endof 1 of ." WAIT" endof 2 of ." LISTEN" endof 3 of ." CONNECT" endof
+         4 of ." WRITE" endof 5 of ." READ" endof 6 of ." CLOSE" endof  dup .x
+   endcase
+;
+: .espconn  ( adr -- )
+   dup .  dup l@ .conntype space  dup 1 la+ l@ .connstate space dup 2 la+ l@ .ip/port  6 la+ l@ ." Rev: " .x cr
+;
+[then]
