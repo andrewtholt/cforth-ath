@@ -2,7 +2,8 @@
 
 default: forth.elf
 
-TOPDIR=../..
+# TOPDIR=../..
+TOPDIR=$(HOME)/Source/Forth/cforth
 
 CONFIG += -DBITS32
 CONFIG += -DFLOATING -DMORE_FP
@@ -20,6 +21,7 @@ CROSS ?= $(XTGCCPATH)xtensa-esp32-elf-
 
 # ESP32 SDK
 # IDF_PATH ?= $(TOPDIR)/../esp-idf
+IDF_PATH ?= $(HOME)/esp/esp-idf
 
 CFORTH_PATH ?= $(abspath $(TOPDIR)/build/esp32)
 
