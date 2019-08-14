@@ -10,10 +10,11 @@ warning @ warning off
 \ : bye standalone?  if  restart  then  bye  ;
 : bye ;
 warning !
-\ : ms  ( msecs -- )  start-ms rest  ;
-: ms  ( msecs -- )  drop ;
 
-: relax  ( -- )  1 ms  ;  \ Give the system a chance to run
+: ms  ( msecs -- )  start-ms rest  ;
+\ : ms  ( msecs -- )  drop ;
+
+: relax  ( -- ) 1 ms  ;  \ Give the system a chance to run
 
 \ Long-running words like "words" can cause watchdog resets unless
 \ we return to the OS periodically.
@@ -30,7 +31,7 @@ alias m-init noop
    false
 ;
 
-: timer@ 0 ;
+\ : timer@ 0 ;
 alias get-ticks timer@
 : ms>ticks  ( ms -- ticks )  #1000 *  ;
 
