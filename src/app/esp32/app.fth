@@ -5,6 +5,7 @@ fl ../../lib/dl.fth
 fl ../../lib/random.fth
 fl ../../lib/ilog2.fth
 fl ../../lib/tek.fth
+fl ../../cforth/printf.fth
 
 warning @ warning off
 : bye standalone?  if  restart  then  bye  ;
