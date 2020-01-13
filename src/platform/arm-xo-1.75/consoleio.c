@@ -134,7 +134,7 @@ int getkey()
     } while (1);
 }
 
-void init_io()
+void init_io(int argc, char **argv, cell *up)
 {
     dbg_uart_only = 0;
 
@@ -1004,7 +1004,7 @@ int gamekeys[] = { // bit 8 implies 0xe0 prefix is needed
     0x067, // left
 };
 
-gamekey_send(int key, int release)
+void gamekey_send(int key, int release)
 {
     int e0, scode;
 
@@ -1023,7 +1023,7 @@ gamekey_send(int key, int release)
     run_queue();
 }
 
-gamekey_sendbits(unsigned int keybits, int down)
+void gamekey_sendbits(unsigned int keybits, int down)
 {
     unsigned int bit;
     int i;
@@ -1117,4 +1117,12 @@ void gamekey_handle(int is_timer)
     if (chgb || t1b || t1b_down || t2b || t2b_down ) {
 	sched_debounce();
     }
+}
+
+int strlen(const char *s)
+{
+        const char *p;
+        for (p=s; *p != '\0'; *p++) {
+        }
+        return p-s;
 }

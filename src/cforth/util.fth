@@ -9,12 +9,10 @@
    then
 ; immediate
 
+: s(  [char] ) parse  ;
+: .(  s( type  ;
+
 : ok ;
-: trigger  0 0 2>r 2r>  drop drop  ; immediate
-\ : [cr] cr ; immediate
-\ : rep  [char] A emit cr foo hex 40 dump decimal cr  trigger  ; immediate
-\ : repb [char] B emit cr foo hex 40 dump decimal cr  trigger  ; immediate
-: x. dup . cr ;
 
 decimal
 
@@ -44,7 +42,7 @@ decimal
 : 0<= ( n -- flag )  dup 0=  swap 0<  or  ;
 : 0>= ( n -- flag )  0< 0=  ;
 : (s  ( -- )  postpone (  ; immediate
-: pad  ( -- adr )  here 100 +  ;
+: pad  ( -- adr )  here 140 +  ;  \ Enough for 128 bits of binary plus a few
 
 \ : c,  ( char -- )   here  1 allot  c!  ;
 

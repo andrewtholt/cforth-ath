@@ -2,22 +2,27 @@
 
 SRC=$(TOPDIR)/src
 
+CPU_VARIANT=-marm -mcpu=strongarm110
+
 # Target compiler definitions
 ifneq "$(findstring arm,$(shell uname -m))" ""
+TCFLAGS += $(CPU_VARIANT)
 include $(SRC)/cpu/host/compiler.mk
 else
 include $(SRC)/cpu/arm/compiler.mk
 endif
 
+VPATH += $(SRC)/cpu/arm $(SRC)/lib
+VPATH += $(SRC)/platform/arm-xo-1.75
+INCS += -I$(SRC)/platform/arm-xo-1.75
+
 include $(SRC)/common.mk
 include $(SRC)/cforth/targets.mk
 include $(SRC)/cforth/embed/targets.mk
 
-DUMPFLAGS = --disassemble -z -x -s
+TCFLAGS += -fno-pie
 
-VPATH += $(SRC)/cpu/arm $(SRC)/lib
-VPATH += $(SRC)/platform/arm-xo-1.75
-INCS += -I$(SRC)/platform/arm-xo-1.75
+DUMPFLAGS = --disassemble -z -x -s
 
 # Platform-specific object files for low-level startup and platform I/O
 
@@ -30,6 +35,14 @@ FORTH_OBJS = ttmain.o tembed.o textend.o  tspiread-simpler.o tconsoleio.o tinfla
 
 SHIM_OBJS = tshimmain.o tspiread.o
 
+SHIM_CFLAGS += -DCFORTHSIZE=$(shell stat -c%s cforth.img)
+SHIM_CFLAGS += -DRAMBASE=$(RAMBASE)
+SHIM_CFLAGS += -DSHIMBASE=$(SHIMBASE)
+
+tshimmain.o: shimmain.c cforth.img
+	@echo TCC $<
+	@$(TCC) $(INCS) $(DEFS) $(TCFLAGS) $(TCPPFLAGS) $(SHIM_CFLAGS) -c $< -o $@
+
 # Recipe for linking the final image
 
 # On XO-1.75, a masked-ROM loader copies CForth from SPI FLASH into SRAM
@@ -40,7 +53,7 @@ DICTSIZE=0xf000
 RAMBASE  = 0xd1000000
 IRQSTACKSIZE = 0x100
 RAMTOP   = 0xd101f000
-SHIMBASE = 0xd1018000
+SHIMBASE = 0xd1019000
 
 TSFLAGS += -DRAMTOP=${RAMTOP}
 TSFLAGS += -DIRQSTACKSIZE=${IRQSTACKSIZE}
