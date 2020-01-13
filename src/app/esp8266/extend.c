@@ -597,7 +597,7 @@ cell ((* const ccalls[])()) = {
   C(rtc_get_reset_reason)   //c reset-reason { -- i.reason }
   C(xthal_get_ccount)       //c xthal_get_ccount  { -- i.count }
 
-  C(dns_gethostbyname1)     //c dns-gethostbyname { a.arg i.xt a.ipaddr a.hostname -- i.stat }
+  C(dns_gethostbyname1)     //c dns-gethostbyname { a.arg i.xt a.ipaddr $.hostname -- i.stat }
 
   C(tcp_write_sw)           //c tcp-write  { a.adr i.len a.pcb -- i.stat }
   C(tcp_new)                //c tcp-new  { -- a.pcb }
@@ -628,4 +628,12 @@ cell ((* const ccalls[])()) = {
 
   C(ws2812b_init)	    //c init-ws2812b { i.gpio# i.short_spins i.long_spins -- }
   C(ws2812b_write)	    //c write-ws2812b { a.adr i.len -- }
+
+  C(pwm_start)              //c pwm_start { -- }
+  C(pwm_set_duty)           //c pwm_set_duty { i.pin i.duty -- }
+  C(pwm_set_freq)           //c pwm_set_freq { i.freq i.pin -- }
+  C(pwm_exist)              //c pwm_exist { i.channel -- i.n }
+  C(pwm_delete)             //c pwm_delete { i.channel -- i }
+  C(pwm_add)                //c pwm_add  { i.channel -- i }
+  C(pwm_init)               //c pwm_init { i.duty i.freq -- }
 };

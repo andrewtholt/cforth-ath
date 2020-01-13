@@ -1,4 +1,3 @@
-: alloc-mem  drop 0  ;  : free-mem 2drop  ;
 \ fl flashif.fth
 \ fl spiif.fth
 \ fl spiflash.fth
@@ -7,7 +6,6 @@ fl ../arm-xo-1.75/smbus.fth
 
 fl ../arm-xo-1.75/addrs.fth
 
-: wljoin  ( w w -- l )  d# 16 lshift or  ;
 : third  ( a b c -- a b c a )  2 pick  ;
 fl ../arm-mmp2/lcd.fth
 
