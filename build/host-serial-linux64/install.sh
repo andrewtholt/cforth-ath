@@ -2,14 +2,26 @@
 
 # set -x
 
+echo "Building cforth ..."
+make
+echo "... done."
 echo "Installing cforth ..."
-BASE="/usr/local"
-LIB="${BASE}/etc"
-BIN="${BASE}/bin"
-cp forth cforth
-strip cforth
-sudo mv ./cforth $BIN
-sudo cp app.dic $LIB
 
-echo "...done."
+DICT="/usr/local/etc"
+if [ -d  $DICT ]; then
+    echo "... Dictionary folder exists ..."
+else
+    echo "... Creating dictionary"
+    sudo mkdir -p $DICT
+fi
+
+echo "... Copying dictionary ..."
+sudo cp app.dic $DICT
+echo "... Copying executable ..."
+strip forth
+sudo cp forth /usr/local/bin/cforth
+
+rm forth
+
+echo "... done."
 
