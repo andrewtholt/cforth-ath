@@ -2,15 +2,10 @@
 
 SRC=$(TOPDIR)/src
 
-CPU_VARIANT=-marm -mcpu=strongarm110
-
 # Target compiler definitions
-ifneq "$(findstring arm,$(shell uname -m))" ""
-TCFLAGS += $(CPU_VARIANT)
-include $(SRC)/cpu/host/compiler.mk
-else
+CROSS ?= arm-none-eabi-
+CPU_VARIANT=-marm -mcpu=strongarm110
 include $(SRC)/cpu/arm/compiler.mk
-endif
 
 VPATH += $(SRC)/cpu/arm $(SRC)/lib
 VPATH += $(SRC)/platform/arm-xo-1.75
@@ -74,6 +69,7 @@ cforth.elf: version $(PLAT_OBJS) $(FORTH_OBJS)
 	    $(PLAT_OBJS) $(FORTH_OBJS) date.o \
 	    $(LIBDIRS) $(LIBGCC)
 	@$(TOBJDUMP) $(DUMPFLAGS) $@ >$(@:.elf=.dump)
+	@if egrep -q '^\S{8}:\s\S{4}\s' $(@:.elf=.dump); then echo 'PJ1 has no Thumb support. Wrong libgcc?'; rm $@; exit 1; fi
 	@nm -n $@ >$(@:.elf=.nm)
 
 shim.elf: $(PLAT_OBJS) $(SHIM_OBJS)
