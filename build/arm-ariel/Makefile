@@ -1,4 +1,4 @@
-# Builds CForth for OLPC XO-4
+# Builds CForth for Ariel (Dell Wyse 3020)
 
 TOPDIR=../..
 
@@ -8,4 +8,4 @@ ifneq "$(shell getconf LONG_BIT)" "32"
 CFLAGS += -m32
 endif
 
-include $(TOPDIR)/src/app/arm-xo-cl4/targets.mk
+include $(TOPDIR)/src/app/arm-ariel/targets.mk

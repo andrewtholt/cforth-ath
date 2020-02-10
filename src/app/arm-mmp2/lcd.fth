@@ -1,4 +1,4 @@
-[ifdef] cl4
+[ifdef] mmp3
 \ This value has the same effect as the value below.  The
 \ difference is that the SCLK_SOURCE_SELECT field added a
 \ low-order bit (bit 29), so the high nibble changed from
@@ -90,6 +90,8 @@ d# 16 constant bpp
    0 h# 134 lcd!   \ Color key U
    0 h# 138 lcd!   \ Color key V
 ;
+
+: third  ( a b c -- a b c a )  2 pick  ;
 
 : centered  ( w h -- )
    hdisp third - 2/               ( w h x )    \ X centering offset
