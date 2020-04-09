@@ -44,9 +44,10 @@ COMPORT ?= /dev/ttyUSB0
 # reopen the terminal emulator serial port connection, and reset the target board
 # You can get stm32loader.py from https://github.com/jsnyder/stm32loader
 
-STMLOADER ?= $(TOPDIR)/../stm32loader/stm32loader.py
+# STMLOADER ?= $(TOPDIR)/../stm32loader/stm32loader.py
+STMLOADER ?= stm32loader.py
 
 VERIFY ?= -v
 
 flash: app.bin
-	python $(STMLOADER) -p $(COMPORT) -e -w $(VERIFY) app.bin
+	$(STMLOADER) -p $(COMPORT) -e -w $(VERIFY) app.bin
