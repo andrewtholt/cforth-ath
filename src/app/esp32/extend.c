@@ -118,5 +118,7 @@ cell ((* const ccalls[])()) = {
 
 	C(errno_val)		//c errno          { -- i.errno }
 	C(strerror)		//c strerror       { i.errno -- $.msg }
+
+    C(athProcessInfo)   //c ps      { -- }
 };
 
