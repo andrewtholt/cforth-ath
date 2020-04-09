@@ -3,6 +3,7 @@
 typedef int cell;
 
 #include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
 #include "esp_system.h"
 #include "nvs_flash.h"
 #include "driver/uart.h"
@@ -476,4 +477,20 @@ cell fs_avail(void)
 void delete_file(char *name)
 {
     remove(expand_path(name));
+}
+
+void athProcessInfo() {
+    char *ptr;
+
+    ptr=malloc(1024);
+
+    memset(ptr,0,1024);
+
+    vTaskList(ptr);
+
+    printf("Task\t\tState   Prio    Stack    Num\n");
+    printf("%s\n", ptr);
+
+    free(ptr);
+
 }

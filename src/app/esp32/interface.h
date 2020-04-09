@@ -50,3 +50,5 @@ char *dirent_name(void *ent);
 void rename_file(char *new, char *old);
 void delete_file(char *path);
 cell fs_avail(void);
+
+void athProcessInfo();
