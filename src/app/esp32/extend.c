@@ -6,6 +6,8 @@
 #include "interface.h"
 
 extern cell *callback_up;
+extern void gpio_matrix_out();
+extern cell gpio_matrix_in();
 
 cell version_adr(void)
 {
@@ -120,5 +122,6 @@ cell ((* const ccalls[])()) = {
 	C(strerror)		//c strerror       { i.errno -- $.msg }
 
     C(athProcessInfo)   //c ps      { -- }
+    C(gpio_matrix_out)      //c gpio-matrix-out { i.inven i.invout i.fun i.pin -- }
+    C(gpio_matrix_in)       //c gpio-matrix-in  { i.invert i.fun i.pin -- }
 };
-
