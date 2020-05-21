@@ -53,7 +53,7 @@ constant /ap-config
       2 of  ." Wrong password" cr   endof
       3 of  ." No AP found" cr    endof
       4 of  ." Connect failed" cr   endof
-      5 of  exit  endof  \ Got IP; the okay case
+      5 of  ." Connected" cr  exit  endof  \ Got IP; the okay case
       ( default )  ." Bad status: " dup .d cr  swap
    endcase
    abort
