@@ -42,6 +42,7 @@ fl car.fth
 
 : app
    banner  hex
+   ." ATH" cr cr
    interrupt?  if  quit  then
    init-i2c
    ['] load-startup-file catch drop
