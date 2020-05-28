@@ -66,5 +66,6 @@ if [ "$ARGS" == "download" ]; then
 fi
 
 CMD="$CMD make $MAKE_FLAGS $ARGS"
-
+echo $CMD
 eval "$CMD"
+
