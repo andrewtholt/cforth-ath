@@ -202,6 +202,7 @@ void title(cell *up)
 {
     cprint("C Forth ", up);
     cprint(" Copyright (c) 2008 FirmWorks\n", up);
+    cprint("ATH\n",up);
 }
 
 void init_io(int argc, char **argv, cell *up)
