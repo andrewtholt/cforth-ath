@@ -1,16 +1,16 @@
 #!/bin/sh
 
-set -x
+# set -x
 
 LEN=`getconf LONG_BIT`
 
 if [ $LEN -ne 64 ]; then
     echo "Attempting to build on wrong platform."
-    exit -1
+    exit 1
 fi
 
-ARCH="amd64"
-echo "Build debian package"
+ARCH=$(dpkg --print-architecture)
+echo "Build debian package for $ARCH"
 echo "First make everything."
 
 # ./build.sh
