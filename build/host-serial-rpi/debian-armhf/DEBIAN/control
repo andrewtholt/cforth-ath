@@ -1,0 +1,8 @@
+Package: cforth
+Section: misc
+Priority: extra
+Maintainer: Andrew Holt
+Architecture: armhf
+Version: 1.0.0
+Description: Mitch Bradleys cforth
+
