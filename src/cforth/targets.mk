@@ -1,3 +1,4 @@
+$(info Host)
 # Make rules for host CForth
 
 VPATH += $(SRC)/cforth
