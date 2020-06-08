@@ -1,3 +1,4 @@
+$(info Embed)
 # Additional rules for embedded CForth
 
 VPATH += $(SRC)/cforth/embed
