@@ -1,7 +1,7 @@
 // Top-level routine for starting Forth
+#include "forth.h"
 
-main()
-{
+int main() {
     void *up;
 
 

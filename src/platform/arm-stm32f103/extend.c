@@ -18,6 +18,7 @@ void adc_open();
 void adc_start();
 void adc_done();
 void adc_read();
+void init_uart();
 
 cell ((* const ccalls[])()) = {
     C(spins)        //c spins     { i.nsxfpins -- }
@@ -33,4 +34,8 @@ cell ((* const ccalls[])()) = {
     C(adc_start)    //c adc-start  { i.time i.channel i.handle -- }
     C(adc_done)     //c adc-done?  { i.handle -- i.flag }
     C(adc_read)     //c adc-get    { i.handle -- i.value }
+
+// ATH
+//
+    C(init_uart)    //c init-uart { -- }
 };

@@ -75,6 +75,7 @@ PLAT_OBJS += tconsoleio.o
 PLAT_OBJS += tsystem_stm32f10x.o
 PLAT_OBJS += tgpio.o
 PLAT_OBJS += tadc.o
+PLAT_OBJS += tuart.o
 
 ttmain.o: vars.h
 
