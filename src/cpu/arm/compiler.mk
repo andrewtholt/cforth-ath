@@ -1,3 +1,4 @@
+$(info Cpu Arm compiler,mk)
 # allow override of default cross location
 CROSS ?= /usr/local/arm/arm-linux/bin/
 TCC=$(CROSS)gcc

@@ -1,19 +1,19 @@
 # Makefile fragment for the final target application
-
+$(info Platform Generic)
 SRC=$(TOPDIR)/src
 
 # Target compiler definitions
-CROSS ?= arm-none-eabi-
-CPU_VARIANT=-mthumb -mcpu=cortex-m3
-include $(SRC)/cpu/arm/compiler.mk
+# CROSS ?= arm-none-eabi-
+# CPU_VARIANT=-mthumb -mcpu=cortex-m3
+include $(SRC)/cpu/generic/compiler.mk
 
 # Select the chip variant
 # MD is Medium Density, for 64K and 128K FLASH sizes
-DEFS += -DSTM32F10X_MD
+# DEFS += -DSTM32F10X_MD
 
 # Defining USE_STDPERIPH_DRIVER causes the CMSIS driver include files to
 # include stm32l1xx_conf.h
-DEFS += -DUSE_STDPERIPH_DRIVER
+# DEFS += -DUSE_STDPERIPH_DRIVER
 
 DICTIONARY=ROM
 
@@ -28,7 +28,7 @@ CFLAGS += -m32 -march=i386
 TCFLAGS += -Os
 
 # Use thumb instruction set to save a little space
-TCFLAGS += -mthumb
+# TCFLAGS += -mthumb
 
 # Omit unreachable functions from output
 

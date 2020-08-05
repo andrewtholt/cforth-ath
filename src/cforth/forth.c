@@ -68,9 +68,8 @@ void udotx(u_cell u, cell *up);
 
 // int printing = 0;
 // Execute an array of Forth execution tokens.
-int
-inner_interpreter(up)
-    cell *up;
+int inner_interpreter(cell *up)
+//    cell *up;
 {
     cell *sp;
     token_t **rp;
@@ -107,7 +106,7 @@ doprim:
 
     switch (token) {
     case 0:
-        FTHERROR("Tried to execute a null token\n");
+        FTHERROR((char *)"Tried to execute a null token\n");
 //      udotx((u_cell)ip-sizeof(*ip), up);
 //      udotx((u_cell)sp, up);
 //      udotx((u_cell)rp, up);
@@ -392,7 +391,8 @@ execute:
     goto token_fetch;
 
 /*$p key */     case KEY:
-    scr = key(up);
+//    scr = key(up);
+    scr = key();
     if (scr == -2) {
         // Save interpreter state, return, and expect reentry
         // to inner_interpreter() upon a later callback
@@ -402,7 +402,8 @@ execute:
     next;
 
 /*$p key? */    case KEY_QUESTION:
-    scr = key_avail(up);
+//    scr = key_avail(up);
+    scr = key_avail();
     if (scr == -2) {
         // Save interpreter state, return, and expect reentry
         // to inner_interpreter() upon a later callback
@@ -419,7 +420,7 @@ execute:
     V(DP) += tos;
     loadtos;
     if ((cell)V(DP) > V(LIMIT))
-        FTHERROR( "Out of dictionary space\n");
+        FTHERROR( (char *)"Out of dictionary space\n");
     next;
 
 /*$p $find */    case ALFIND:
@@ -635,7 +636,7 @@ execute:
 
 /*$p -level */      case MINUS_LEVEL:
     if (V(STATE) == INTERPRETING)
-        FTHERROR("Conditionals not paired\n");
+        FTHERROR((char *)"Conditionals not paired\n");
     if (V(COMPLEVEL)) {
         --V(COMPLEVEL);
         if (V(COMPLEVEL) == 0) {      // Dropped back to level 0
@@ -787,7 +788,7 @@ execute:
 /*$p compile */ case COMPILE: compile(*ip++);    next;
 
 /*$p bye */     case BYE:  return(-1);
-/*$p lose */    case LOSE: FTHERROR("Undefined word encountered\n");  goto abort;
+/*$p lose */    case LOSE: FTHERROR((char *)"Undefined word encountered\n");  goto abort;
 
     // There's no need to modify sp to account for the top of stack
     // being in a register because push has already put tos on the
@@ -1143,12 +1144,14 @@ execute:
     next;
 
 /*$p read-file */  case READ_FILE:      /* adr len fid -- actual ior */
-    ascr = (void *)pop;    // fid
+//    ascr = (void *)pop;    // fid
+    ascr = (u_char *)pop;    // fid
     tos = pfread(sp, tos, ascr, up);
     next;
 
 /*$p write-file */  case WRITE_FILE:      /* adr len fid -- ior */
-    ascr = (void *)pop;    // fid
+//    ascr = (void *)pop;    // fid
+    ascr = (u_char *)pop;    // fid
     scr = pop;             // len
     tos = pfwrite((void *)tos, scr, ascr, up);
     next;
@@ -1251,18 +1254,17 @@ default:    /* DOES> word */
   } /* End of while (1) */
 }
 
-void switch_stacks(struct stacks *old, struct stacks *new, cell *up)
-{
+void switch_stacks(struct stacks *old, struct stacks *newStack, cell *up) {
   if (old) {
     old->sp = V(XSP);
     old->sp0 = V(SPZERO);
     old->rp = V(XRP);
     old->rp0 = V(RPZERO);
   }
-  V(XSP) = new->sp;
-  V(SPZERO) = new->sp0;
-  V(XRP) = new->rp;
-  V(RPZERO) = new->rp0;
+  V(XSP) = newStack->sp;
+  V(SPZERO) = newStack->sp0;
+  V(XRP) = newStack->rp;
+  V(RPZERO) = newStack->rp0;
 }
 
 void spush(cell n, cell *up)
@@ -1300,9 +1302,9 @@ execute_word(char *s, cell *up)
     xt_t xt;
 
     if (alfind(s, my_strlen(s), (xt_t *)&xt, up) == 0) {
-        FTHERROR("Can't find '");
+        FTHERROR((char *)"Can't find '");
         alerror(s, my_strlen(s), up);
-        FTHERROR("'\n");
+        FTHERROR((char *)"'\n");
         return(-2);
     }
 
