@@ -52,3 +52,12 @@ void delete_file(char *path);
 cell fs_avail(void);
 
 void athProcessInfo();
+void init_uart1(void);
+uint8_t uart1_key(void);
+void uart1_emit(uint8_t);
+
+int uart1_read(int, char *) ;
+int uart1_write(int, char *) ;
+uint8_t uart1_rx_buffer(void);
+void uart1_flush(void);
+

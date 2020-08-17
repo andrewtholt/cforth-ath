@@ -34,8 +34,7 @@ void app_main(void)
 // getchar().
 
 #define BUF_SIZE (1024)
-void init_uart(void)
-{
+void init_uart(void) {
     int uart_num = UART_NUM_0;
 
     uart_config_t uart_config = {
@@ -54,6 +53,79 @@ void init_uart(void)
     // and no event queue.
     uart_driver_install(uart_num, BUF_SIZE * 2, 0, 0, NULL, 0);
 }
+#define UART2_TXD (4)
+#define UART2_RXD (5)
+
+void init_uart1(void) {
+    int uart_num = UART_NUM_1;
+
+    uart_config_t uart_config = {
+       .baud_rate = 9600,
+       .data_bits = UART_DATA_8_BITS,
+       .parity = UART_PARITY_DISABLE,
+       .stop_bits = UART_STOP_BITS_1,
+       .flow_ctrl = UART_HW_FLOWCTRL_DISABLE,
+       .rx_flow_ctrl_thresh = 122,
+    };
+    ESP_ERROR_CHECK(uart_param_config(uart_num, &uart_config));
+
+    // Set the pins.
+    ESP_ERROR_CHECK(uart_set_pin(uart_num, UART2_TXD, UART2_RXD, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE));
+//    ESP_ERROR_CHECK(uart_set_pin(uart_num, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE, 18, 19));
+
+
+    // Install driver with a receive buffer but no transmit buffer
+    // and no event queue.
+    uart_driver_install(uart_num, BUF_SIZE * 2, 0, 0, NULL, 0);
+
+//    uart_write_bytes(uart_num, (const char*) "Hello World", 11);
+
+}
+
+uint8_t uart1_key(void) {
+    uint8_t data[2] ;
+    data[0] = data[1] = 0;
+
+    int len = uart_read_bytes(UART_NUM_1, data,1, portMAX_DELAY );
+
+//    printf("Len =%d\n", len);
+//    printf("data=%d\n", data[0]);
+    return data[0];
+}
+
+int uart1_read(int len, char *ptr ) {
+    int readLen = uart_read_bytes(UART_NUM_1, (const char *)ptr, len, portMAX_DELAY );
+
+    return readLen;
+}
+
+int uart1_write(int len, char *ptr) {
+    int writeLen = uart_write_bytes(UART_NUM_1, (const char *)ptr, len );
+
+    return writeLen;
+}
+
+int uart1_rx_buffer(void) {
+
+    int len = 0;
+    esp_err_t err = uart_get_buffered_data_len(UART_NUM_1,(size_t *)&len);
+    return len;
+}
+
+void uart1_flush() {
+    uart_flush_input(UART_NUM_1);
+}
+
+void uart1_emit(uint8_t data) {
+    char buffer[2];
+    buffer[0]=data;
+
+//    printf("data     =0x%02x\n",data);
+//    printf("buffer[0]=0x%02x\n",buffer[0]);
+
+    int len = uart_write_bytes(UART_NUM_1, (const char *)buffer, 1);
+}
+
 
 // Routines for the ccalls[] table in textend.c.  Add new ones
 // as necessary.

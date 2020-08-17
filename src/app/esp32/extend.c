@@ -24,6 +24,7 @@ cell build_date_adr(void)
 #include <errno.h>
 cell errno_val(void) {  return (cell)errno;  }
 #include <string.h>
+
 // Above gets us strerror()
 
 
@@ -122,6 +123,13 @@ cell ((* const ccalls[])()) = {
 	C(strerror)		//c strerror       { i.errno -- $.msg }
 
     C(athProcessInfo)   //c ps      { -- }
+    C(init_uart1)       //c init-uart1 { -- }
+    C(uart1_key)        //c uart1-key { -- i.char }
+    C(uart1_emit)        //c uart1-emit { i.char -- }
+    C(uart1_read)       //c uart1-read { a.ptr a.ptr -- i.read }
+    C(uart1_write)      //c uart1-write { a.ptr i.len -- i.wrote }
+    C(uart1_rx_buffer)  //c uart1-rx-depth { -- i.len }
+    C(uart1_flush)      //c uart1-flush { -- }
     C(gpio_matrix_out)      //c gpio-matrix-out { i.inven i.invout i.fun i.pin -- }
     C(gpio_matrix_in)       //c gpio-matrix-in  { i.invert i.fun i.pin -- }
 };

@@ -46,6 +46,9 @@ fl files.fth
 
 fl server.fth
 
+fl mqtt.fth
+fl mqtt-interface.fth
+
 \ Replace 'quit' to make CForth auto-run some application code
 \ instead of just going interactive.
 \ : app  banner  hex init-i2c  showstack  quit  ;

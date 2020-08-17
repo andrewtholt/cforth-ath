@@ -4,9 +4,13 @@
 
 echo 
 COMPORT="NONE"
+VERBOSE="NO"
 
-while getopts fda:ht: flag; do
+while getopts fda:ht:v flag; do
     case $flag in
+        v)
+            VERBOSE="YES"
+            ;;
         f)
             ARGS="flash"
             ;;
@@ -29,6 +33,7 @@ while getopts fda:ht: flag; do
             ;;
         t)
             COMPORT=$OPTARG
+            export COMPORT
             ;;
     esac
 done
@@ -69,6 +74,7 @@ if [ "$ARGS" == "download" ]; then
     fi
 fi
 
+set -x
 CMD="$CMD make $MAKE_FLAGS $ARGS"
 echo $CMD
 eval "$CMD"
