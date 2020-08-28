@@ -17,6 +17,7 @@ void gpio_is_input_pu(cell gpio_num);
 void gpio_is_input_pd(cell gpio_num);
 
 cell wifi_open(char *password, char *ssid);
+cell ath_wifi_connected();
 
 void esp_log_level_set(char *component, int level);
 

@@ -327,6 +327,8 @@ static EventGroupHandle_t wifi_event_group;
    to the AP with an IP? */
 const int CONNECTED_BIT = BIT0;
 
+static cell connected = 0;
+
 static esp_err_t wifi_event_handler(void *ctx, system_event_t *event)
 {
     switch(event->event_id) {
@@ -335,12 +337,14 @@ static esp_err_t wifi_event_handler(void *ctx, system_event_t *event)
         break;
     case SYSTEM_EVENT_STA_GOT_IP:
         xEventGroupSetBits(wifi_event_group, CONNECTED_BIT);
+        connected = -1;
         break;
     case SYSTEM_EVENT_STA_DISCONNECTED:
         /* This is a workaround as ESP32 WiFi libs don't currently
            auto-reassociate. */
         esp_wifi_connect();
         xEventGroupClearBits(wifi_event_group, CONNECTED_BIT);
+        connected = 0;
         break;
     default:
         break;
@@ -349,13 +353,15 @@ static esp_err_t wifi_event_handler(void *ctx, system_event_t *event)
 }
 
 cell ath_wifi_connected() {
+    /*
     cell failFlag = -1;
 
     if((xEventGroupGetBits(wifi_event_group) & CONNECTED_BIT) != 0 ) {
         failFlag = 0;
     }
+    */
 
-    return failFlag;
+    return connected;;
 }
 
 cell wifi_open(cell timeout, char *password, char *ssid)
