@@ -3,6 +3,8 @@ Section: misc
 Priority: extra
 Maintainer: Andrew Holt
 Architecture: amd64
-Version: 1.0.0
+Version: 1.0.1
 Description: Mitch Bradleys cforth
+    1.0.0 First package
+    1.0.1 No changes, brought other architectures in line to save confusion
 
