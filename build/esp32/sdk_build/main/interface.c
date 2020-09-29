@@ -582,3 +582,11 @@ void athProcessInfo() {
     free(ptr);
 
 }
+
+#include "esp_sleep.h"
+
+int athWakeupCause() {
+    int cause = esp_sleep_get_wakeup_cause();
+    return cause;
+}
+

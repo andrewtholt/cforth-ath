@@ -124,6 +124,7 @@ cell ((* const ccalls[])()) = {
 	C(strerror)		//c strerror       { i.errno -- $.msg }
 
     C(athProcessInfo)   //c ps      { -- }
+    C(athWakeupCause)   //c wakeup-cause { -- i.cause }
     C(init_uart1)       //c init-uart1 { -- }
     C(uart1_key)        //c uart1-key { -- i.char }
     C(uart1_emit)        //c uart1-emit { i.char -- }
