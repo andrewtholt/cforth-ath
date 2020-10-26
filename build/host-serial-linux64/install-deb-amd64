@@ -20,7 +20,16 @@ HERE=`pwd`
 
 DEST="./debian-${ARCH}/usr/local/bin"
 LIBS="./debian-${ARCH}/usr/local/etc"
+DEBS="./debian-${ARCH}/DEBIAN"
 
+if [ ! -d ${DEBS} ];then
+    mkdir -p ${DEBS}
+fi
+
+if [ ! -f ${DEBS}/control ]; then
+    echo "Fatal Error: No package control file"
+    exit 1
+fi
 
 if [ ! -d ${DEST} ]; then
     mkdir -p ${DEST}
