@@ -156,4 +156,6 @@ cell ((* const ccalls[])()) = {
         C(alarm_us)              //c set-alarm-us   { i.xt i.us -- }
         C(repeat_alarm_us)       //c repeat-alarm-us   { i.xt i.us -- }
         C(us)                    //c us { i.us -- }
+    C(athProcessInfo)        //c ps { -- }
+
 };

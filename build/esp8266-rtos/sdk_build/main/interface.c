@@ -601,3 +601,20 @@ cell adc_fetch(void)
     uint16_t data;
     return adc_read(&data) != ESP_OK ? -1 : data;
 }
+
+void athProcessInfo() {
+    char *ptr;
+
+    ptr=malloc(1024);
+
+    memset(ptr,0,1024);
+
+    /*
+    vTaskList(ptr);
+
+    printf("Task\t\tState   Prio    Stack    Num\n");
+    printf("%s\n", ptr);
+    */
+
+    free(ptr);
+}

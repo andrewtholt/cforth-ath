@@ -6,8 +6,7 @@
 cell *callback_up;
 
 // Defines startup routine for nodemcu-firmware
-// void forth()
-void app_main()
+void forth()
 {
     init_io(0, (char **)0, (cell *)callback_up);   // Perform platform-specific initialization
     callback_up = (void *)init_forth();
