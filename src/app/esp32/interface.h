@@ -17,6 +17,7 @@ void gpio_is_input_pu(cell gpio_num);
 void gpio_is_input_pd(cell gpio_num);
 
 cell wifi_open(char *password, char *ssid);
+cell ath_wifi_connected();
 
 void esp_log_level_set(char *component, int level);
 
@@ -52,6 +53,8 @@ void delete_file(char *path);
 cell fs_avail(void);
 
 void athProcessInfo();
+int athWakeupCause();
+
 void init_uart1(void);
 uint8_t uart1_key(void);
 void uart1_emit(uint8_t);

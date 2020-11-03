@@ -10,7 +10,7 @@ STMLIB ?= $(TOPDIR)/STM32F10x_StdPeriph_Lib_V3.5.0
 
 TOPDIR=../..
 
-MYNAME=arm-stm32f103
+MYNAME=arm-stm32f411
 
 CONFIG += -DBITS32 -DT16
 

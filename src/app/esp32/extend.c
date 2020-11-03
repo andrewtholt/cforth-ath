@@ -83,6 +83,7 @@ cell ((* const ccalls[])()) = {
 	C(gpio_is_input_pd)	//c gpio-is-input-pulldown { i.gpio# -- }
 
 	C(wifi_open)		//c wifi-open { $ssid $password i.timeout -- i.error? }
+    C(ath_wifi_connected)  //c wifi-connected?  { -- i.flag }
 
 	C(esp_log_level_set)	//c log-level! { i.level $component -- }
 
@@ -123,6 +124,7 @@ cell ((* const ccalls[])()) = {
 	C(strerror)		//c strerror       { i.errno -- $.msg }
 
     C(athProcessInfo)   //c ps      { -- }
+    C(athWakeupCause)   //c wakeup-cause { -- i.cause }
     C(init_uart1)       //c init-uart1 { -- }
     C(uart1_key)        //c uart1-key { -- i.char }
     C(uart1_emit)        //c uart1-emit { i.char -- }
