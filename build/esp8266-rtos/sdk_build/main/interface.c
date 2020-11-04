@@ -605,16 +605,18 @@ cell adc_fetch(void)
 void athProcessInfo() {
     char *ptr;
 
+    printf("\nathProcessInfo\n");
+
+    /*
     ptr=malloc(1024);
 
     memset(ptr,0,1024);
 
-    /*
     vTaskList(ptr);
 
     printf("Task\t\tState   Prio    Stack    Num\n");
     printf("%s\n", ptr);
-    */
 
     free(ptr);
+    */
 }
