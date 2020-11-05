@@ -85,3 +85,12 @@ cell adc_init_args(cell mode, cell divisor);
 cell adc_read_fast(uint16_t *, int);
 cell adc_fetch(void);
 void athProcessInfo();
+void athTst();
+
+cell dbOpen(char *, void *);
+void dbClose(void *);
+
+int dbPut(int, int, int);
+
+int dbGet(const int vLen, char *v, const char *k, nvs_handle *db) ;
+

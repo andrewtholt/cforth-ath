@@ -55,12 +55,12 @@ void init_uart(void)
     int uart_num = UART_NUM_0;
 
     uart_config_t uart_config = {
-       .baud_rate = 115200,
-       .data_bits = UART_DATA_8_BITS,
-       .parity = UART_PARITY_DISABLE,
-       .stop_bits = UART_STOP_BITS_1,
-       .flow_ctrl = UART_HW_FLOWCTRL_DISABLE,
-       .rx_flow_ctrl_thresh = 122,
+        .baud_rate = 115200,
+        .data_bits = UART_DATA_8_BITS,
+        .parity = UART_PARITY_DISABLE,
+        .stop_bits = UART_STOP_BITS_1,
+        .flow_ctrl = UART_HW_FLOWCTRL_DISABLE,
+        .rx_flow_ctrl_thresh = 122,
     };
     uart_param_config(uart_num, &uart_config);
 
@@ -110,9 +110,9 @@ void i2c_close()
 }
 
 #define I2C_FINISH \
-    i2c_master_stop(cmd); \
-    esp_err_t ret = i2c_master_cmd_begin(I2C_NUM, cmd, 1000 / portTICK_RATE_MS); \
-    i2c_cmd_link_delete(cmd);
+i2c_master_stop(cmd); \
+esp_err_t ret = i2c_master_cmd_begin(I2C_NUM, cmd, 1000 / portTICK_RATE_MS); \
+i2c_cmd_link_delete(cmd);
 
 int i2c_write_read(uint8_t stop, uint8_t slave, uint8_t rsize, uint8_t *rbuf, uint8_t wsize, uint8_t *wbuf)
 {
@@ -124,31 +124,31 @@ int i2c_write_read(uint8_t stop, uint8_t slave, uint8_t rsize, uint8_t *rbuf, ui
     cmd = i2c_cmd_link_create();
     i2c_master_start(cmd);
     if (wsize) {
-	i2c_master_write_byte(cmd, ( slave << 1 ) | I2C_MASTER_WRITE, ACK_CHECK);
-	i2c_master_write(cmd, wbuf, wsize, ACK_CHECK);
-	if (!rsize) {
-    i2c_master_stop(cmd); \
-    esp_err_t ret = i2c_master_cmd_begin(I2C_NUM, cmd, 1000 / portTICK_RATE_MS); \
-    i2c_cmd_link_delete(cmd);
-//	    I2C_FINISH;
-	    return ret;
-	}
-	if (stop) { // rsize is nonzero
-    i2c_master_stop(cmd); \
-    esp_err_t ret = i2c_master_cmd_begin(I2C_NUM, cmd, 1000 / portTICK_RATE_MS); \
-    i2c_cmd_link_delete(cmd);
-//	    I2C_FINISH;
-	    if (ret)
-		return -1;
-	    cmd = i2c_cmd_link_create();
-	    i2c_master_start(cmd);
-	} else {
-	    i2c_master_start(cmd);
-	}
-	i2c_master_write_byte(cmd, ( slave << 1 ) | I2C_MASTER_READ, ACK_CHECK);
+        i2c_master_write_byte(cmd, ( slave << 1 ) | I2C_MASTER_WRITE, ACK_CHECK);
+        i2c_master_write(cmd, wbuf, wsize, ACK_CHECK);
+        if (!rsize) {
+            i2c_master_stop(cmd); \
+            esp_err_t ret = i2c_master_cmd_begin(I2C_NUM, cmd, 1000 / portTICK_RATE_MS); \
+            i2c_cmd_link_delete(cmd);
+            //	    I2C_FINISH;
+            return ret;
+        }
+        if (stop) { // rsize is nonzero
+            i2c_master_stop(cmd); \
+            esp_err_t ret = i2c_master_cmd_begin(I2C_NUM, cmd, 1000 / portTICK_RATE_MS); \
+            i2c_cmd_link_delete(cmd);
+            //	    I2C_FINISH;
+            if (ret)
+                return -1;
+            cmd = i2c_cmd_link_create();
+            i2c_master_start(cmd);
+        } else {
+            i2c_master_start(cmd);
+        }
+        i2c_master_write_byte(cmd, ( slave << 1 ) | I2C_MASTER_READ, ACK_CHECK);
     } else {
-	// rsize must be nonzero because of the initial check at the top
-	i2c_master_write_byte(cmd, ( slave << 1 ) | I2C_MASTER_READ, ACK_CHECK);
+        // rsize must be nonzero because of the initial check at the top
+        i2c_master_write_byte(cmd, ( slave << 1 ) | I2C_MASTER_READ, ACK_CHECK);
     }
 
     if (rsize > 1) {
@@ -165,7 +165,7 @@ cell i2c_rb(int stop, int slave, int reg)
     uint8_t rval[1];
     uint8_t regb[1] = { reg };
     if (i2c_write_read(stop, slave, 1, rval, 1, regb))
-	return -1;
+        return -1;
     return rval[0];
 }
 
@@ -174,7 +174,7 @@ cell i2c_be_rw(cell stop, cell slave, cell reg)
     uint8_t rval[2];
     uint8_t regb[1] = { reg };
     if (i2c_write_read(stop, slave, 2, rval, 1, regb))
-	return -1;
+        return -1;
     return (rval[0]<<8) + rval[1];
 }
 
@@ -183,7 +183,7 @@ cell i2c_le_rw(cell stop, cell slave, cell reg)
     uint8_t rval[2];
     uint8_t regb[1] = { reg };
     if (i2c_write_read(stop, slave, 2, rval, 1, regb))
-	return -1;
+        return -1;
     return (rval[1]<<8) + rval[0];
 }
 
@@ -268,27 +268,27 @@ void gpio_mode(cell gpio_num, cell direction, cell pull)
 static EventGroupHandle_t wifi_event_group;
 
 /* The event group allows multiple bits for each event,
-   but we only care about one event - are we connected
-   to the AP with an IP? */
+ *   but we only care about one event - are we connected
+ *   to the AP with an IP? */
 const int CONNECTED_BIT = BIT0;
 
 static esp_err_t wifi_event_handler(void *ctx, system_event_t *event)
 {
     switch(event->event_id) {
-    case SYSTEM_EVENT_STA_START:
-        esp_wifi_connect();
-        break;
-    case SYSTEM_EVENT_STA_GOT_IP:
-        xEventGroupSetBits(wifi_event_group, CONNECTED_BIT);
-        break;
-    case SYSTEM_EVENT_STA_DISCONNECTED:
-        /* This is a workaround as ESP32 WiFi libs don't currently
-           auto-reassociate. */
-        esp_wifi_connect();
-        xEventGroupClearBits(wifi_event_group, CONNECTED_BIT);
-        break;
-    default:
-        break;
+        case SYSTEM_EVENT_STA_START:
+            esp_wifi_connect();
+            break;
+        case SYSTEM_EVENT_STA_GOT_IP:
+            xEventGroupSetBits(wifi_event_group, CONNECTED_BIT);
+            break;
+        case SYSTEM_EVENT_STA_DISCONNECTED:
+            /* This is a workaround as ESP32 WiFi libs don't currently
+             *           auto-reassociate. */
+            esp_wifi_connect();
+            xEventGroupClearBits(wifi_event_group, CONNECTED_BIT);
+            break;
+        default:
+            break;
     }
     return ESP_OK;
 }
@@ -377,8 +377,8 @@ cell start_server(cell port)
 
     // listen for incoming connections
     if (listen(listenfd, 1000000) != 0) {
-	close(listenfd);
-	return -3;
+        close(listenfd);
+        return -3;
     }
     return listenfd;
 }
@@ -446,9 +446,9 @@ void *next_file(void *dir)
     struct dirent *ent;
 
     while ((ent = readdir((DIR *)dir)) != NULL) {
-	if (ent->d_type == DT_REG) {
-	    return ent;
-	}
+        if (ent->d_type == DT_REG) {
+            return ent;
+        }
     }
     return NULL;
 }
@@ -462,7 +462,7 @@ cell dirent_size(void *ent)
 {
     struct stat statbuf;
     if (stat(expand_path(((struct dirent *)ent)->d_name), &statbuf)) {
-	return -1;
+        return -1;
     }
     return statbuf.st_size;
 }
@@ -478,9 +478,9 @@ void rename_file(char *new, char *old)
 
 cell fs_avail(void)
 {
-  u32_t total, used;
-  esp_spiffs_info("/spiffs", &total, &used);
-  return (cell)(total - used);
+    u32_t total, used;
+    esp_spiffs_info("/spiffs", &total, &used);
+    return (cell)(total - used);
 }
 
 void delete_file(char *name)
@@ -537,7 +537,7 @@ static void create_timer() {
         return;
     }
     const esp_timer_create_args_t alarm_timer_args = {
-            .callback = &alarm_callback,
+        .callback = &alarm_callback,
     };
     esp_timer_create(&alarm_timer_args, &alarm_timer);
 }
@@ -610,11 +610,77 @@ void athProcessInfo() {
     memset(ptr,0,1024);
 
     /*
-    vTaskList(ptr);
-
-    printf("Task\t\tState   Prio    Stack    Num\n");
-    printf("%s\n", ptr);
-    */
+     *    vTaskList(ptr);
+     *
+     *    printf("Task\t\tState   Prio    Stack    Num\n");
+     *    printf("%s\n", ptr);
+     */
 
     free(ptr);
+}
+
+void athTst(char *a) {
+    printf("a is %s\n", a);
+}
+
+#include "nvs.h"
+#include "nvs_flash.h"
+#include "esp_partition.h"
+
+#define HASH 1024
+// Stack:   i.handle $.name -- i.status
+
+cell dbOpen(char *namespace, nvs_handle *out_handle ) {
+
+    esp_err_t err = nvs_flash_init();
+    if (err == ESP_ERR_NVS_NO_FREE_PAGES ) {
+        // NVS partition was truncated and needs to be erased
+        // Retry nvs_flash_init
+        ESP_ERROR_CHECK(nvs_flash_erase());
+        err = nvs_flash_init();
+    }
+    ESP_ERROR_CHECK( err );
+
+    if ( err == ESP_OK) {
+        printf("Opening namespace %s\n", namespace);
+        err = nvs_open(namespace, NVS_READWRITE, out_handle);
+        printf("... done handles is %d\n", *out_handle);
+    }
+
+    return (cell) err;
+
+}
+
+void dbClose(nvs_handle h) {
+    nvs_close(h);
+}
+//
+// Stack: { i.db $.key $.v  -- i.status }
+//
+int dbPut(const void*v, const void *k, nvs_handle *db) {
+
+    esp_err_t status = 0;
+
+    printf("\ndbPut\n");
+    printf("db is %x\n", (unsigned int)db);
+    printf("Key   is %s\n",(char *)k);
+    printf("Value is %s\n",(char *)v);
+
+    status =  nvs_set_str(*db,k,v);
+    return status;
+}
+
+//
+//  Stack:  i.db $.key a.v i.len -- i.status
+//
+int dbGet(int vLen, char *v, const char *k, nvs_handle *db) {
+    printf("dbGet\n");
+    printf("db is %x\n", (unsigned int)db);
+    printf("Key   is %s\n",(char *)k);
+
+    int status = nvs_get_str(*db,k,&v[1],(size_t *) &vLen);
+    uint8_t len= (uint8_t)strlen(&v[1]);
+    v[0] = len;
+
+    return status;
 }

@@ -65,6 +65,8 @@ if [ "$ARGS" == "download" ]; then
     fi
 fi
 
+rm -f extend.o
+rm -f sdk_build/build/esp8266-rtos.elf
 CMD="$CMD make $MAKE_FLAGS $ARGS"
 echo $CMD
 eval "$CMD"

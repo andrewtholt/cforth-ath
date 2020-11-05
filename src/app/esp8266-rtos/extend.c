@@ -156,6 +156,14 @@ cell ((* const ccalls[])()) = {
         C(alarm_us)              //c set-alarm-us   { i.xt i.us -- }
         C(repeat_alarm_us)       //c repeat-alarm-us   { i.xt i.us -- }
         C(us)                    //c us { i.us -- }
-    C(athProcessInfo)        //c ps { -- }
 
+    C(athProcessInfo)        //c ps { -- }
+    C(athTst)              //c ath-test { $.data -- }
+    //
+    // Database
+    //
+    C(dbOpen)                   //c db-open { i.handle $.name -- i.status }
+    C(dbClose)                  //c db-close { i.handle -- }
+    C(dbPut)                      //c db-put { i.db $.key $.v  -- i.status }
+    C(dbGet)                     //c db-get { i.db $.key a.v i.len -- i.status }
 };
