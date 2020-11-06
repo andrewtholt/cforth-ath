@@ -652,6 +652,7 @@ cell dbOpen(char *namespace, nvs_handle *out_handle ) {
 }
 
 void dbClose(nvs_handle h) {
+    nvs_commit(h);
     nvs_close(h);
 }
 //

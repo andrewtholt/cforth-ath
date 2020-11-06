@@ -92,5 +92,5 @@ void dbClose(void *);
 
 int dbPut(int, int, int);
 
-int dbGet(const int vLen, char *v, const char *k, nvs_handle *db) ;
+int dbGet(const int vLen, char *v, const char *k, void *db) ;
 
