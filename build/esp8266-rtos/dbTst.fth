@@ -41,34 +41,71 @@ buffer /buffer 2constant value-buffer
 
     ." Let's see it >" buffer count type ." <" cr
 ;
-\
-\ Usage:  get <name>
-\
-: get
-    buffer 32 erase
+
+: (get) { name nlen val vlen -- }
+    val vlen erase
     db
-    safe-parse-word value-buffer db-get 0= if
+    name nlen val vlen db-get
+;
+
+: (set) { name nlen val vlen -- }
+    db
+    name nlen val vlen
+    db-put
+;
+
+: get
+    safe-parse-word \ db Name len
+    value-buffer
+
+    (get) 0= if
         buffer count type cr
     else
-        ." Not found." cr
+        ." Not found" cr
     then
 ;
 
 : set
-    value-buffer erase
-    db
     safe-parse-word
     safe-parse-word
-    db-put 0<> if
-        ." Error" cr
+    (set) 0<> if
+        ." Failed" cr
     then
-
 ;
+
+\
+\ Usage:  get <name>
+\
+\ : get
+\     buffer 32 erase
+\     db
+\     safe-parse-word value-buffer db-get 0= if
+\         buffer count type cr
+\     else
+\         ." Not found." cr
+\     then
+\ ;
+\
+\ : set
+\     value-buffer erase
+\     db
+\     safe-parse-word
+\     safe-parse-word
+\     db-put 0<> if
+\         ." Error" cr
+\     then
+\
+\ ;
 
 : tst
     init
     set-tst
     get-tst
 ;
+
+
+init
+
+set WIFI_PASSWD password
 
 
