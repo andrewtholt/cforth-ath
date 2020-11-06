@@ -94,3 +94,4 @@ int dbPut(int, int, int);
 
 int dbGet(const int vLen, char *v, const char *k, void *db) ;
 
+int dbDelete(const char *key, void *db) ;

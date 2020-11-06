@@ -166,4 +166,5 @@ cell ((* const ccalls[])()) = {
     C(dbClose)                  //c db-close { i.handle -- }
     C(dbPut)                      //c db-put { i.db $.key $.v  -- i.status }
     C(dbGet)                     //c db-get { i.db $.key a.v i.len -- i.status }
+    C(dbDelete)                //c db-rm { i.db $.key -- i.status }
 };

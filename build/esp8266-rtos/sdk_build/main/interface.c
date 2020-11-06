@@ -685,3 +685,8 @@ int dbGet(int vLen, char *v, const char *k, nvs_handle *db) {
 
     return status;
 }
+
+int dbDelete(const char *key, nvs_handle *db) {
+    esp_err_t err = nvs_erase_key(*db, key);
+    return (int)err;
+}
