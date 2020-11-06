@@ -4,27 +4,9 @@ s" dbtst.fth" $find [if]
     marker dbtst.fth
 [then]
 
-variable db
-0 value init-run
-
-32 constant /buffer
-/buffer buffer: buffer
-
-buffer /buffer 2constant value-buffer
-
-: init
-    init-run 0= if
-        ." Open db ..." cr
-        db s" settings" db-open abort" ...  failed"
-
-        ." ... done" cr
-        value-buffer erase
-        -1 to init-run
-    then
-;
+requires nvs.fth
 
 : set-tst
-    init
     ." Set some data ..." cr
     db s" TEST" s" TWO" db-put abort" ... failed"
     ." ... done" cr
@@ -33,79 +15,17 @@ buffer /buffer 2constant value-buffer
 ;
 
 : get-tst
-    init
     ." Get some data ..." cr
 \    db s" TEST" buffer 32 db-get abort" ... failed"
     db s" TEST" value-buffer db-get abort" ... failed"
     ." ... done" cr
 
-    ." Let's see it >" buffer count type ." <" cr
+    ." Let's see it >" .value cr
 ;
-
-: (get) { name nlen val vlen -- }
-    val vlen erase
-    db
-    name nlen val vlen db-get
-;
-
-: (set) { name nlen val vlen -- }
-    db
-    name nlen val vlen
-    db-put
-;
-
-: get
-    safe-parse-word \ db Name len
-    value-buffer
-
-    (get) 0= if
-        buffer count type cr
-    else
-        ." Not found" cr
-    then
-;
-
-: set
-    safe-parse-word
-    safe-parse-word
-    (set) 0<> if
-        ." Failed" cr
-    then
-;
-
-\
-\ Usage:  get <name>
-\
-\ : get
-\     buffer 32 erase
-\     db
-\     safe-parse-word value-buffer db-get 0= if
-\         buffer count type cr
-\     else
-\         ." Not found." cr
-\     then
-\ ;
-\
-\ : set
-\     value-buffer erase
-\     db
-\     safe-parse-word
-\     safe-parse-word
-\     db-put 0<> if
-\         ." Error" cr
-\     then
-\
-\ ;
 
 : tst
-    init
+    db-init
     set-tst
     get-tst
 ;
-
-
-init
-
-set WIFI_PASSWD password
-
 
