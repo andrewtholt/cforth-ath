@@ -642,9 +642,9 @@ cell dbOpen(char *namespace, nvs_handle *out_handle ) {
     ESP_ERROR_CHECK( err );
 
     if ( err == ESP_OK) {
-        printf("Opening namespace %s\n", namespace);
+//        printf("Opening namespace %s\n", namespace);
         err = nvs_open(namespace, NVS_READWRITE, out_handle);
-        printf("... done handles is %d\n", *out_handle);
+//        printf("... done handles is %d\n", *out_handle);
     }
 
     return (cell) err;
@@ -662,10 +662,12 @@ int dbPut(const void*v, const void *k, nvs_handle *db) {
 
     esp_err_t status = 0;
 
+    /*
     printf("\ndbPut\n");
     printf("db is %x\n", (unsigned int)db);
     printf("Key   is %s\n",(char *)k);
     printf("Value is %s\n",(char *)v);
+    */
 
     status =  nvs_set_str(*db,k,v);
     return status;
@@ -675,9 +677,11 @@ int dbPut(const void*v, const void *k, nvs_handle *db) {
 //  Stack:  i.db $.key a.v i.len -- i.status
 //
 int dbGet(int vLen, char *v, const char *k, nvs_handle *db) {
+    /*
     printf("dbGet\n");
     printf("db is %x\n", (unsigned int)db);
     printf("Key   is %s\n",(char *)k);
+    */
 
     int status = nvs_get_str(*db,k,&v[1],(size_t *) &vLen);
     uint8_t len= (uint8_t)strlen(&v[1]);
