@@ -16,6 +16,7 @@ typedef unsigned char u8_t;
 #include "esp_wifi.h"
 #include "esp_log.h"
 #include "esp_event.h"
+#include "esp_attr.h"
 #include "nvs_flash.h"
 
 #include "lwip/err.h"
@@ -26,6 +27,10 @@ typedef unsigned char u8_t;
 #include "driver/pwm.h"
 
 extern void forth(void);
+
+#define MAX_RTC_MEM 32
+
+static RTC_NOINIT_ATTR uint32_t rtc_mem[MAX_RTC_MEM];
 
 // This is the routine that is run by main_task() from cpu_start.c,
 // i.e. the "call in" from FreeRTOS to Forth.
@@ -620,3 +625,8 @@ void athProcessInfo() {
     free(ptr);
     */
 }
+
+cell athNvmem() {
+    return (cell)rtc_mem;
+}
+
