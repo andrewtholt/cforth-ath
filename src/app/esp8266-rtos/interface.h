@@ -85,3 +85,4 @@ cell adc_init_args(cell mode, cell divisor);
 cell adc_read_fast(uint16_t *, int);
 cell adc_fetch(void);
 void athProcessInfo();
+cell athNvmem();

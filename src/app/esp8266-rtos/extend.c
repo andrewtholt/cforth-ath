@@ -157,5 +157,6 @@ cell ((* const ccalls[])()) = {
         C(repeat_alarm_us)       //c repeat-alarm-us   { i.xt i.us -- }
         C(us)                    //c us { i.us -- }
     C(athProcessInfo)        //c ps { -- }
+    C(athNvmem)             //c nvmem { -- a.nvmem }
 
 };
