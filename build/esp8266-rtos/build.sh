@@ -8,7 +8,7 @@ COMPORT="NONE"
 while getopts fda:ht: flag; do
     case $flag in
         f)
-            ARGS="download"
+            ARGS="flash"
             ;;
         a)
             ARGS="$OPTARG ${ARGS}"
