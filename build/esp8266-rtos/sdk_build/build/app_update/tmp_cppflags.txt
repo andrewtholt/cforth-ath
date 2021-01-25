@@ -1,0 +1,1 @@
+esp32-v1.0-133-g86dfe88-dirty esp8266-rtos v3.4-dev-411-g7f99618d
