@@ -612,7 +612,6 @@ void athProcessInfo() {
 
     printf("\nathProcessInfo\n");
 
-    /*
     ptr=malloc(1024);
 
     memset(ptr,0,1024);
@@ -623,7 +622,6 @@ void athProcessInfo() {
     printf("%s\n", ptr);
 
     free(ptr);
-    */
 }
 
 cell athNvmem() {

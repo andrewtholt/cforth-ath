@@ -54,7 +54,7 @@ if [ "$ARGS" = "clean" ]; then
 fi
 
 CMD=""
-if [ "$ARGS" == "download" ]; then
+if [ "$ARGS" == "flash" ]; then
     echo $COMPORT
     if [  "$COMPORT" == "NONE" ]; then
         echo "Error"
