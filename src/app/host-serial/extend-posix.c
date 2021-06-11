@@ -518,6 +518,12 @@ void *athDlopen( int flags, int len, char *filename ) {
     filename[len]='\0';
     res=dlopen(filename, flags);
 
+    char *err = dlerror();
+
+    if (res == NULL) {
+        fprintf(stderr,"dlopen error %s:%s\n", filename,err  );
+    }
+
     return res;
 }
 
