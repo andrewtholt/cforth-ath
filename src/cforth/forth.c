@@ -127,14 +127,32 @@ doprim:
 
 /*$p shift */   case SHIFT:
     if ( tos < 0 ) {
-        tos = -tos;
-        tos = (u_cell) *sp++ >> (u_cell)tos;
+        if (tos <= (-CELLBITS)) {
+            ++sp;
+            tos = 0;
+        } else {
+            tos = -tos;
+            tos = (u_cell) *sp++ >> (u_cell)tos;
+        }
     }
-    else
-        binop(<<);
+    else {
+        if (tos >= CELLBITS) {
+            ++sp;
+            tos = 0;
+        } else {
+            binop(<<);
+        }
+    }
     next;
 
-/*$p >>a */     case SHIFTA:  binop(>>);  next;
+/*$p >>a */     case SHIFTA:
+        if (tos >= CELLBITS) {
+            ++sp;
+            tos = 0;
+        } else {
+            binop(>>);
+        }
+        next;
 /*$p dup */     case DUP:     *--sp = tos;  next;
 /*$p drop */    case DROP:    loadtos;  next;
 /*$p swap */    case SWAP:    scr = *sp;  *sp = tos;  tos = scr;  next;
@@ -557,6 +575,16 @@ execute:
     // because it is never manipulated outside of floatops.c
     *--sp = tos; V(XSP) = (cell)sp;  *--rp = ip;  V(XRP) = (cell)rp;
     return(scr);
+
+    /*$p (pause */ case PAREN_PAUSE:
+    *--sp = tos; V(XSP) = (cell)sp;
+    *--rp = ip;  V(XRP) = (cell)rp;
+    do {
+        up = (cell*)V(LINK);
+    } while(V(ASLEEP));
+    sp = (cell *)V(XSP);  tos = *sp++;
+    rp = (token_t **)V(XRP); ip = *rp++;
+    next;
 
 /*$p 0 */       case ZERO:      push(0);                 next;
 /*$p here */    case HERE:      push(V(DP));             next;
@@ -1311,6 +1339,8 @@ execute_word(char *s, cell *up)
 
 /* Forth variables */
 /* Forth name   C #define       */
+/*$u link       e LINK:         */
+/*$u asleep     e ASLEEP:       */
 /*$u #user      e NUM_USER:     */
 /*$u >in        e TO_IN:        */
 /*$u base       e BASE:         */

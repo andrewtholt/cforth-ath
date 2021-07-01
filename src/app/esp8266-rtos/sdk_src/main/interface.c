@@ -16,7 +16,11 @@ typedef unsigned char u8_t;
 #include "esp_wifi.h"
 #include "esp_log.h"
 #include "esp_event.h"
+<<<<<<< HEAD:build/esp8266-rtos/sdk_build/main/interface.c
 #include "esp_attr.h"
+=======
+#include "esp_event_loop.h"
+>>>>>>> upstream/WIP:src/app/esp8266-rtos/sdk_src/main/interface.c
 #include "nvs_flash.h"
 
 #include "lwip/err.h"
@@ -86,7 +90,7 @@ void ms(int msecs)
 
 #include "driver/i2c.h"
 
-#define I2C_NUM 1
+#define I2C_NUM I2C_NUM_0
 #define ACK_CHECK 1
 #define ACK_VAL 0
 #define NACK_VAL 1
@@ -94,7 +98,7 @@ void ms(int msecs)
 // void i2c_setup(cell sda, cell scl)
 cell i2c_open(uint8_t sda, uint8_t scl)
 {
-    int i2c_master_port = 1;
+    int i2c_master_port = I2C_NUM;
     i2c_config_t conf;
     conf.mode = I2C_MODE_MASTER;
     conf.sda_io_num = sda;
@@ -227,46 +231,48 @@ void gpio_toggle(cell gpio_num)
     gpio_set_level(gpio_num, !level);
 }
 
+static void gpio_setup(uint32_t gpio_num, gpio_mode_t mode, bool pu, bool pd)
+{
+    gpio_config_t io_conf;
+    io_conf.intr_type = GPIO_INTR_DISABLE;
+    io_conf.mode = mode;
+    io_conf.pin_bit_mask = 1 << gpio_num;
+    io_conf.pull_down_en = pd;
+    io_conf.pull_up_en = pd;
+    gpio_config(&io_conf);
+}
 void gpio_is_output(cell gpio_num)
 {
-    gpio_set_direction(gpio_num, GPIO_MODE_OUTPUT);
+    gpio_setup(gpio_num, GPIO_MODE_OUTPUT, 0, 0);
 }
 
 void gpio_is_output_od(cell gpio_num)
 {
-    gpio_set_direction(gpio_num, GPIO_MODE_OUTPUT_OD);
+    gpio_setup(gpio_num, GPIO_MODE_OUTPUT_OD, 0, 0);
 }
 
 void gpio_is_input(cell gpio_num)
 {
-    gpio_set_pull_mode(gpio_num, GPIO_FLOATING);
-    gpio_set_direction(gpio_num, GPIO_MODE_INPUT);
+    gpio_setup(gpio_num, GPIO_MODE_INPUT, 0, 0);
 }
 
 void gpio_is_input_pu(cell gpio_num)
 {
-    gpio_set_pull_mode(gpio_num, GPIO_PULLUP_ONLY);
-    gpio_set_direction(gpio_num, GPIO_MODE_INPUT);
+    gpio_setup(gpio_num, GPIO_MODE_INPUT, 1, 0);
 }
 
 void gpio_is_input_pd(cell gpio_num)
 {
-    gpio_set_pull_mode(gpio_num, GPIO_PULLDOWN_ONLY);
-    gpio_set_direction(gpio_num, GPIO_MODE_INPUT);
+    gpio_setup(gpio_num, GPIO_MODE_INPUT, 0, 1);
 }
 
-// For compatibility with ESP8266 interface
+// For compatibility with ancient ESP8266 interface
 // 1 constant gpio-input
 // 2 constant gpio-output
 // 6 constant gpio-opendrain
-void gpio_mode(cell gpio_num, cell direction, cell pull)
+void gpio_mode(cell gpio_num, cell mode, cell pullup)
 {
-    gpio_set_direction(gpio_num, direction);
-    if (pull) {
-        gpio_pullup_en(gpio_num);
-    } else {
-        gpio_pullup_dis(gpio_num);
-    }
+    gpio_setup(gpio_num, mode, pullup, 0);
 }
 
 /* FreeRTOS event group to signal when we are connected & ready to make a request */
@@ -277,43 +283,204 @@ static EventGroupHandle_t wifi_event_group;
    to the AP with an IP? */
 const int CONNECTED_BIT = BIT0;
 
-static esp_err_t wifi_event_handler(void *ctx, system_event_t *event)
+/* The event group allows multiple bits for each event, but we only care about two events:
+ * - we are connected to the AP with an IP
+ * - we failed to connect after the maximum amount of retries */
+#define WIFI_CONNECTED_BIT BIT0
+#define WIFI_FAIL_BIT      BIT1
+
+static int retry_num = -1;  // -1 retries forever, otherwise retry if nonzero and decrement
+static void wifi_sta_event_handler(void* arg, esp_event_base_t event_base,
+                                int32_t event_id, void* event_data)
 {
-    switch(event->event_id) {
-    case SYSTEM_EVENT_STA_START:
-        esp_wifi_connect();
-        break;
-    case SYSTEM_EVENT_STA_GOT_IP:
-        xEventGroupSetBits(wifi_event_group, CONNECTED_BIT);
-        break;
-    case SYSTEM_EVENT_STA_DISCONNECTED:
-        /* This is a workaround as ESP32 WiFi libs don't currently
-           auto-reassociate. */
-        esp_wifi_connect();
-        xEventGroupClearBits(wifi_event_group, CONNECTED_BIT);
-        break;
-    default:
-        break;
+    if (event_base == WIFI_EVENT) {
+        switch (event_id) {
+            case WIFI_EVENT_STA_START:
+                esp_wifi_connect();
+                break;
+            case WIFI_EVENT_STA_DISCONNECTED:
+                if (retry_num < 0) {
+                    esp_wifi_connect();
+                    break;
+                }
+                if (retry_num) {
+                    esp_wifi_connect();
+                    --retry_num;
+                    break;
+                }
+                xEventGroupSetBits(wifi_event_group, WIFI_FAIL_BIT);
+                break;
+        }
+    } else if (event_base == IP_EVENT) {
+        if (event_id == IP_EVENT_STA_GOT_IP) {
+            // ip_event_got_ip_t* event = (ip_event_got_ip_t*) event_data;
+            // char *ipaddr = ip4addr_ntoa(&event->ip_info.ip));
+            xEventGroupSetBits(wifi_event_group, CONNECTED_BIT);
+        }
     }
-    return ESP_OK;
 }
 
-cell wifi_open(cell timeout, char *password, char *ssid)
+cell wifi_open_station(char *password, char *ssid, cell storage, cell timeout, cell retries)
 {
-    tcpip_adapter_init();
+    retry_num = retries;
+
     wifi_event_group = xEventGroupCreate();
-    if (esp_event_loop_init(wifi_event_handler, NULL)) return -1;
+
+    tcpip_adapter_init();
+
+    esp_err_t err = esp_event_loop_create_default();
+    if (err != ESP_OK && err != ESP_ERR_INVALID_STATE) {
+        return -2;
+    }
+
     wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
-    if (esp_wifi_init(&cfg) ) return -2;
-    if (esp_wifi_set_storage(WIFI_STORAGE_RAM)) return -3;
-    wifi_config_t wifi_config = { };
+    if (esp_wifi_init(&cfg) ) {
+        return -3;
+    }
+    if (esp_event_handler_register(WIFI_EVENT, ESP_EVENT_ANY_ID, &wifi_sta_event_handler, NULL)) {
+        esp_wifi_deinit();
+        esp_event_loop_delete_default();
+        return -5;
+    }
+    if (esp_event_handler_register(IP_EVENT, IP_EVENT_STA_GOT_IP, &wifi_sta_event_handler, NULL)) {
+        esp_wifi_deinit();
+        esp_event_loop_delete_default();
+        return -6;
+    }
+    if (esp_wifi_set_storage(storage)) {
+        esp_wifi_deinit();
+        esp_event_loop_delete_default();
+        return -4;
+    }
+
+    wifi_config_t wifi_config = {};
     strncpy((char *)wifi_config.sta.ssid, ssid, sizeof(wifi_config.sta.ssid));
     strncpy((char *)wifi_config.sta.password, password, sizeof(wifi_config.sta.password));
-    if(esp_wifi_set_mode(WIFI_MODE_STA)) return -4;
-    if(esp_wifi_set_config(ESP_IF_WIFI_STA, &wifi_config)) return -5;
-    if(esp_wifi_start()) return -6;
-    if (xEventGroupWaitBits(wifi_event_group, CONNECTED_BIT, false, true, timeout) != CONNECTED_BIT) return -7;
+
+    if (strlen(password)) {
+        wifi_config.sta.threshold.authmode = WIFI_AUTH_WEP;
+        esp_wifi_set_protocol(ESP_IF_WIFI_STA, WIFI_PROTOCOL_11B | WIFI_PROTOCOL_11G | WIFI_PROTOCOL_11N);
+    }
+    if (esp_wifi_set_mode(WIFI_MODE_STA)) {
+        esp_wifi_deinit();
+        esp_event_loop_delete_default();
+        return -7;
+    }
+    if (esp_wifi_set_config(ESP_IF_WIFI_STA, &wifi_config)) {
+        esp_wifi_deinit();
+        esp_event_loop_delete_default();
+        return -8;
+    }
+    if (esp_wifi_start()) {
+        esp_wifi_deinit();
+        esp_event_loop_delete_default();
+        return -9;
+    }
+
+    // Wait until either the connection is established (WIFI_CONNECTED_BIT)
+    // or the connection failed for the maximum number of re-tries (WIFI_FAIL_BIT).
+    // The bits are set by the event handler)
+    EventBits_t bits = xEventGroupWaitBits(wifi_event_group,
+                                           WIFI_CONNECTED_BIT | WIFI_FAIL_BIT,
+                                           pdFALSE,
+                                           pdFALSE,
+                                           timeout);
+
+    esp_event_handler_unregister(IP_EVENT, IP_EVENT_STA_GOT_IP, &wifi_sta_event_handler);
+    esp_event_handler_unregister(WIFI_EVENT, ESP_EVENT_ANY_ID, &wifi_sta_event_handler);
+    vEventGroupDelete(wifi_event_group);
+
+    if (!(bits & WIFI_CONNECTED_BIT)) {
+        esp_wifi_stop();
+        esp_wifi_deinit();
+        esp_event_loop_delete_default();
+        return (bits & WIFI_FAIL_BIT) ? -10 : -11;
+    }
     return 0;
+}
+cell wifi_open_station_compat(char *password, char *ssid, cell timeout)
+{
+    return wifi_open_station(password, ssid, WIFI_STORAGE_RAM, timeout, -1);
+}
+cell wifi_open_ap(char *password, char *ssid, cell storage, cell max_connections)
+{
+    int pwlen = strlen(password);
+    if (pwlen && pwlen < 8) {
+        return -5;
+    }
+
+    tcpip_adapter_init();
+
+    esp_err_t err = esp_event_loop_create_default();
+    if (err != ESP_OK && err != ESP_ERR_INVALID_STATE) {
+        return -2;
+    }
+
+    wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
+    if (esp_wifi_init(&cfg) ) {
+        esp_event_loop_delete_default();
+        return -3;
+    }
+    if (esp_wifi_set_storage(storage)) {
+        esp_wifi_deinit();
+        esp_event_loop_delete_default();
+        return -4;
+    }
+
+    wifi_config_t wifi_config = {};
+    strncpy((char *)wifi_config.ap.ssid, ssid, sizeof(wifi_config.ap.ssid));
+    // wifi_config.ap.ssid_len = 0;  // String is null-terminated
+
+    strncpy((char *)wifi_config.ap.password, password, sizeof(wifi_config.ap.password));
+
+    // wifi_config.ap.channel = 1;
+    wifi_config.ap.authmode = strlen(password) ? WIFI_AUTH_WPA_WPA2_PSK : WIFI_AUTH_OPEN;
+    wifi_config.ap.max_connection = max_connections;
+    wifi_config.ap.beacon_interval = 100;
+
+    if (esp_wifi_set_mode(WIFI_MODE_AP)) {
+        esp_wifi_deinit();
+        esp_event_loop_delete_default();
+        return -7;
+    }
+    err = esp_wifi_set_config(ESP_IF_WIFI_AP, &wifi_config);
+    if (err) {
+        esp_wifi_deinit();
+        esp_event_loop_delete_default();
+        return err;
+    }
+    if (esp_wifi_start()) {
+        esp_wifi_deinit();
+        esp_event_loop_delete_default();
+        return -9;
+    }
+
+    return 0;
+}
+
+cell wifi_off(void)
+{
+    esp_err_t err;
+    err = esp_wifi_stop();
+    if (err) {
+        return err;
+    }
+    err = esp_wifi_deinit();
+    if (err) {
+        return err;
+    }
+    err = esp_event_loop_delete_default();
+    if (err) {
+        return err;
+    }
+    return 0;
+}
+
+cell get_wifi_mode(void)
+{
+    wifi_mode_t mode;
+    esp_wifi_get_mode(&mode);
+    return mode;
 }
 
 void set_log_level(char *component, int level)
@@ -321,33 +488,50 @@ void set_log_level(char *component, int level)
     esp_log_level_set(component, level);
 }
 
-int stream_connect(char *host, char *portstr, int timeout_msecs)
+int client_socket(char *host, char *portstr, cell protocol)
 {
     char *endptr;
     uint16_t port = strtol(portstr, &endptr, 10);
     if (endptr != (portstr + strlen(portstr))) {
-        return -5;
+        return -8;
     }
 
     struct hostent * hostent = gethostbyname(host);
     if (hostent == NULL) {
-        return -4;
+        return -7;
+    }
+    struct in_addr **addr_list = (struct in_addr **)hostent->h_addr_list;
+    if (addr_list[0] == NULL) {
+        return -6;
     }
 
-    struct sockaddr_in destAddr;
-    destAddr.sin_addr.s_addr = htonl(INADDR_ANY);
+    struct sockaddr_in destAddr = {};
     destAddr.sin_family = AF_INET;
     destAddr.sin_port = htons(port);
-    destAddr.sin_addr.s_addr = *hostent->h_addr;
+    memcpy(&destAddr.sin_addr, addr_list[0], sizeof(destAddr.sin_addr));
 
-    int s = socket(AF_INET, SOCK_STREAM, IPPROTO_IP);
+    int s = socket(AF_INET, protocol, IPPROTO_IP);
     if (s < 0) {
-        return -2;
+        return -5;
     }
-
     if (connect(s, (struct sockaddr *)&destAddr, sizeof(destAddr)) < 0) {
         close(s);
-        return -2;
+        return -4;
+    }
+    return s;
+}
+
+cell udp_client(char *host, char *portstr)
+{
+    return client_socket(host, portstr, SOCK_DGRAM);
+}
+
+int stream_connect(char *host, char *portstr, int timeout_msecs)
+{
+
+    int s = client_socket(host, portstr, SOCK_STREAM);
+    if (s < 0) {
+        return s;
     }
 
     struct timeval recv_timeout;
@@ -362,7 +546,7 @@ int stream_connect(char *host, char *portstr, int timeout_msecs)
     return s;
 }
 
-cell start_server(cell port)
+cell bound_socket(cell port, cell protocol)
 {
     struct sockaddr_in addr;
     addr.sin_addr.s_addr = htonl(INADDR_ANY);
@@ -370,7 +554,7 @@ cell start_server(cell port)
     addr.sin_port = htons((unsigned short)port);
     addr.sin_addr.s_addr = 0;
 
-    int listenfd = socket(AF_INET, SOCK_STREAM, IPPROTO_IP);
+    int listenfd = socket(AF_INET, protocol, IPPROTO_IP);
     if (listenfd < 0) {
         return -2;
     }
@@ -379,6 +563,15 @@ cell start_server(cell port)
     if (err != 0) {
         return -3;
     }
+    return listenfd;
+}
+
+cell start_server(cell port)
+{
+    int listenfd = bound_socket(port, SOCK_STREAM);
+    if (listenfd < 0) {
+        return listenfd;
+    }
 
     // listen for incoming connections
     if (listen(listenfd, 1000000) != 0) {
@@ -386,6 +579,11 @@ cell start_server(cell port)
 	return -3;
     }
     return listenfd;
+}
+
+cell start_udp_server(cell port)
+{
+    return bound_socket(port, SOCK_DGRAM);
 }
 
 cell my_select(cell maxfdp1, void *reads, void *writes, void *excepts, cell msecs)
