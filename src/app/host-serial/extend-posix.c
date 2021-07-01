@@ -329,21 +329,38 @@ cell file_date(cell stradr)
         return (cell)buf.st_mtime;
 }
 
-void ms(cell nms)
-{
+void ms(cell nms) {
+    printf("ms\n");
     usleep(nms*1000);  // nanosleep(timespec) would be better
 }
 
-void us(cell nus)
-{
+void us(cell nus) {
     usleep(nus);  // nanosleep(timespec) would be better
+}
+
+#include <stdbool.h>
+bool fd_in_ready(int fd) {
+    int nfds=1;
+
+    bool rdy = false;
+
+    struct pollfd fdset[nfds];
+
+    fdset[0].fd = fd;
+    fdset[0].events = POLLIN;
+    fdset[0].revents = 0;
+
+    int ret = poll(fdset, nfds, 0);
+
+    rdy = ( ret > 0) ? true : false ;
+
+    return rdy;
 }
 
 #include <sys/socket.h>
 #include <netdb.h>
 
-int stream_connect(char *host, char *port, int timeout)
-{
+int stream_connect(char *host, char *port, int timeout) {
   struct addrinfo hints, *res, *res0;
   int error;
   int s;
@@ -480,6 +497,7 @@ void set_error_callback(void)
 
 cell ((* const ccalls[])()) = {
   // OS-independent functions
+  C(fd_in_ready)       //c fd-in?          { i.fd -- i.out }
   C(ms)                //c ms             { i.ms -- }
   C(get_msecs)         //c get-msecs      { -- i.ms }
   C(us)                //c us             { i.microseconds -- }

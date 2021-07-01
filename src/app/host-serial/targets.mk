@@ -26,8 +26,11 @@ ifeq ($(UNAME_S),Darwin)
 endif
 endif
 
+$(info $$API  is [${API}])
+
 # EXTENDSRC is the source file for extensions; it is compiled to extend.o
 EXTENDSRC = $(APPPATH)/extend-$(API).c
+$(info $$EXTENDSRC  is [${EXTENDSRC}])
 
 VPATH += $(APPPATH)
 INCS += -I$(APPPATH)
