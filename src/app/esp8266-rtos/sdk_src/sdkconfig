@@ -99,11 +99,7 @@ CONFIG_ESP_TLS_USING_MBEDTLS=y
 # CONFIG_ESP_TLS_PSK_VERIFICATION is not set
 # CONFIG_ESP_WOLFSSL_INTERNAL is not set
 # CONFIG_WOLFSSL_DEBUG is not set
-<<<<<<< HEAD:build/esp8266-rtos/sdk_build/sdkconfig
-CONFIG_ESP8266_NMI_WDT=y
-=======
 # CONFIG_ESP8266_NMI_WDT is not set
->>>>>>> upstream/WIP:src/app/esp8266-rtos/sdk_src/sdkconfig
 # CONFIG_ESP8266_XTAL_FREQ_40 is not set
 CONFIG_ESP8266_XTAL_FREQ_26=y
 CONFIG_ESP8266_XTAL_FREQ=26

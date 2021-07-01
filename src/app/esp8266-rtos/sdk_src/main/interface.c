@@ -16,11 +16,11 @@ typedef unsigned char u8_t;
 #include "esp_wifi.h"
 #include "esp_log.h"
 #include "esp_event.h"
-<<<<<<< HEAD:build/esp8266-rtos/sdk_build/main/interface.c
+
 #include "esp_attr.h"
-=======
+
 #include "esp_event_loop.h"
->>>>>>> upstream/WIP:src/app/esp8266-rtos/sdk_src/main/interface.c
+
 #include "nvs_flash.h"
 
 #include "lwip/err.h"

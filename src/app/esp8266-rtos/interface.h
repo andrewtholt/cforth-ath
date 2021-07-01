@@ -20,7 +20,11 @@ void gpio_is_input_pu(cell gpio_num);
 void gpio_is_input_pd(cell gpio_num);
 void gpio_mode(cell gpio_num, cell direction, cell pull);
 
-cell wifi_open(char *password, char *ssid);
+cell get_wifi_mode(void);
+cell wifi_open_station(char *password, char *ssid, cell storage, cell timeout, cell retries);
+cell wifi_open_station_compat(char *password, char *ssid, cell timeout);
+cell wifi_open_ap(char *password, char *ssid, cell storage, cell max_connections);
+cell wifi_off(void);
 
 void set_log_level(char *component, int level);
 
@@ -36,7 +40,9 @@ cell lwip_listen(cell handle, cell backlog);
 cell lwip_accept(cell handle, void *adr, void *addrlen);
 
 cell stream_connect(char *hostname, char *portname, cell timeout);
+cell udp_client(char *hostname, char *portname);
 cell start_server(cell port);
+cell start_udp_server(cell port);
 cell dhcpc_status(void);
 void ip_info(void *buf);
 cell my_lwip_write(cell handle, cell len, void *adr);
