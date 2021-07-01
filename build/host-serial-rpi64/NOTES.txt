@@ -1,0 +1,47 @@
+Underlying primitive ACALL
+
+(You won't need to use acall directly; rather you can build on acall:. But you will need to understand the argument conversion details so read on.)
+
+ACALL ( [ args ... ] format-adr function-adr -- [ result ] )
+
+function-adr is the address of the routine to call, as you would get from dlsym
+format-adr is the address of a null-terminated format string that describes how to process arguments
+[ args ... ] are the arguments, if any
+[ result ] is the result, if any
+The format string contains a sequence of characters that control the passing of arguments from the Forth stack to the C call frame. The string must contain exactly one '-', separating the arguments from the results. The first argument character corresponds to the top of the Forth stack and the first C function argument, etc. The valid argument characters are:
+
+'i' pops a number from the Forth stack into the next C argument
+'a' pops a number from the Forth stack into the next C argument as a pointer (1)
+'$' pops two numbers "adr len" from the Forth stack, converting that Forth string to a C-style null-terminated string (2)
+The valid result characters are:
+
+'i' push the C return value onto the Forth stack (but see 'h' below)
+'a' push the C return value - a pointer - onto the Forth stack
+'s' convert the C return value - a null-terminated string - onto the Forth stack in "adr len" form
+'h' cast the "int" C return value to the type of a Forth cell and push it onto the Forth stack (3)
+Notes:
+
+The 'a' format conversion is currently identical to the 'i' format, since modern versions of CForth use a cell size that is the same as C's "intptr_t". But see 'h' below.
+The '$' format conversion conveniently handles the difference between Forth "adr len" strings and C null-terminated strings. You might think that it is inefficient because of a need to copy the "adr len" string somewhere and add a null character, but CForth has a trick. The '$' implementation checks to see if there happens to be a trailing '\0' already and if so, it avoids the copy. Whenever CForth stores a string in the dictionary, it "wastes" a byte for a null terminator "just in case". In many case the wasted byte is free because the next item in the dictionary must be aligned, so the null terminator is swallowed in the padding.
+The 'h' conversion is rather interesting. In most 64-bit data models, "int" is 32 bits while "int *" is 64. Some library functions on some 64-bit platforms return a (signed) "int" value in a 64-bit register with the upper 32 bits zero. To represent the signed value properly in a 64-bit Forth cell, it must be sign-extended. The place where this first bit me was in the return values from libusb - and it also affects the glfw graphics library. In general, if the C prototype return value is "int", 'h' is the best conversion. On a lot of platforms it doesn't matter, but on some...
+Example:
+
+The format string "a$i-h" would correspond to the Forth stack diagram
+
+foo ( n1 adr len ptr -- n2 )
+
+and the C prototype
+
+int foo(void *, char *, int)
+
+Defining/parsing word ACALL:
+
+ACALL: \ name { args } ( adr -- )
+
+Defines "name" as a Forth word to call the C function whose entry address is "adr". Parses the input line for argument conversion information, converting that information to a format string for ACALL. The argument conversion information looks like, for example:
+
+{ i.timeout $.portname $.hostname -- i.handle }
+
+That would result in the ACALL format string "i$$-i". Essentially, only the first character of each word is relevant; everything else is just for documentation.
+
+Look at the various src/app/*/extend.c files to see many examples.
