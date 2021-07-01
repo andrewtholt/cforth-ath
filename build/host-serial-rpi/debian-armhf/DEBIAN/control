@@ -1,0 +1,11 @@
+Package: cforth    
+Section: misc    
+Priority: extra    
+Maintainer: Andrew Holt    
+Architecture: armhf    
+Version: 1.0.3    
+Description: Mitch Bradleys cforth    
+    1.0.0 First package    
+    1.0.1 No changes, brought other architectures in line to save confusion    
+    1.0.2 Added fd-get?    
+    1.0.3 Merged from Mitch.    
