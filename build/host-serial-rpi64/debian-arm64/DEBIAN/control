@@ -3,6 +3,8 @@ Section: misc
 Priority: extra
 Maintainer: Andrew Holt
 Architecture: arm64
-Version: 1.0.0
+Version: 1.0.1
 Description: Mitch Bradleys cforth
+    1.0.0 First package
+    1.0.1 Added forth.sh
 
