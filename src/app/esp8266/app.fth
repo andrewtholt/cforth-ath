@@ -98,8 +98,9 @@ fl tcpnew.fth
 
 fl ../../lib/url.fth
 \ fl serve-sensors.fth
+fl serve-hcsr04.fth
 
-fl car.fth
+fl car2.fth
 
 \ Measures NTC thermistor on channel 2 pulled up with 10K
 \ against 2:1 voltage divider on channel 3.
@@ -170,5 +171,12 @@ fl sdspi.fth
    sd-card-init
 ;
 [then]
+
+4 constant eth-cs-gpio  \ Depends on hardware wiring
+\ The MAC address of my first-article Sun2 Ethernet card
+create s2mac  8 c, 0 c, $20 c, 1 c, 2 c, $5b c,
+: start-net  ( -- )
+   s2mac eth-cs-gpio open-ethernet drop
+;
 
 " app.dic" save

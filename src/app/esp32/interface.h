@@ -15,11 +15,16 @@ void gpio_is_output_od(cell gpio_num);
 void gpio_is_input(cell gpio_num);
 void gpio_is_input_pu(cell gpio_num);
 void gpio_is_input_pd(cell gpio_num);
+void gpio_mode(cell gpio_num, cell direction, cell pull);
 
+void gpio_matrix_out();
+cell gpio_matrix_in();
+
+cell get_wifi_mode(void);
 cell wifi_open(char *password, char *ssid);
 cell ath_wifi_connected();
 
-void esp_log_level_set(char *component, int level);
+void set_log_level(char *component, int level);
 
 cell lwip_socket(cell family, cell type, cell proto);
 cell lwip_bind_r(cell handle, void *addr, cell len);
@@ -52,15 +57,4 @@ void rename_file(char *new, char *old);
 void delete_file(char *path);
 cell fs_avail(void);
 
-void athProcessInfo();
-int athWakeupCause();
-
-void init_uart1(void);
-uint8_t uart1_key(void);
-void uart1_emit(uint8_t);
-
-int uart1_read(int, char *) ;
-int uart1_write(int, char *) ;
-uint8_t uart1_rx_buffer(void);
-void uart1_flush(void);
-
+void us(cell us);

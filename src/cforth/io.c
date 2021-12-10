@@ -320,7 +320,7 @@ nextchar()
 }
 
 int
-moreinput()
+moreinput(cell *up)
 {
     if ( input_file == STRINGINPUT )
         return (*strptr != '\0');

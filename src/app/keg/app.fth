@@ -95,8 +95,8 @@ false value suppress-delay?
 
 defer check-abort
 
-: activator-delay  ( -- )
-   suppress-delay?  if  exit  then
+: activator-delay  ( #seconds -- )
+   suppress-delay?  if  drop exit  then
    #10 *  0 swap  do  check-abort  #100 ms  -1 +loop
 ;
 
@@ -136,8 +136,8 @@ defer check-abort
 : sanitizer-pump-off  ( -- ) " PeroxidePump Off" .status2 sanitizer-pump pump-off clear2  ;
 : water-open  ( -- )    " Water On"  .status2  water valve-open    clear2  ;
 : water-closed  ( -- )  " Water Off" .status2  water valve-closed  clear2  ;
-: air-open  ( -- )    " Air On"  .status2  air solenoid-valve-open    clear2  ;
-: air-closed  ( -- )  " Air Off" .status2  air solenoid-valve-closed  clear2  ;
+: air-open  ( -- )    " Air On"  .status2  air valve-open    clear2  ;
+: air-closed  ( -- )  " Air Off" .status2  air valve-closed  clear2  ;
 
 : safe-state  ( -- )
    true to suppress-delay?
