@@ -505,6 +505,12 @@ cell example1(cell a, cell b) {
     return(a+b);
 }
 
+void athGoodbye(cell rc) {
+
+    (void)exit(rc);
+    return;
+}
+
 /*
 void *athDlparams() {
 //    return &params;
@@ -664,10 +670,9 @@ cell ((* const ccalls[])()) = {
 // ATH
 #ifdef ATH
 C(example1)    //c sum { i.a i.b -- i.sum }
+C(athGoodbye)    //c goodbye { i.a -- }
 C(athDlopen)   //c dlopen { a.name i.len i.flag -- a.lib }
 C(athDlsym)    //c dlsym  { a.name i.len i.lib -- a.func }
-// C(athDlexec)    //c dlexec  { a.struct -- a.func }
-// C(athDlparams) //c dl-params { -- a.p }
 C(athDlclose)  //c dlclose { a.lib -- }
 #endif
 
