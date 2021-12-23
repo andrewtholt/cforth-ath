@@ -505,6 +505,12 @@ cell example1(cell a, cell b) {
     return(a+b);
 }
 
+void athGoodbye(cell rc) {
+
+    (void)exit(rc);
+    return;
+}
+
 /*
 void *athDlparams() {
 //    return &params;
@@ -517,6 +523,12 @@ void *athDlopen( int flags, int len, char *filename ) {
 
     filename[len]='\0';
     res=dlopen(filename, flags);
+
+    char *err = dlerror();
+
+    if (res == NULL) {
+        fprintf(stderr,"dlopen error %s:%s\n", filename,err  );
+    }
 
     return res;
 }
@@ -658,6 +670,7 @@ cell ((* const ccalls[])()) = {
 // ATH
 #ifdef ATH
 C(example1)    //c sum { i.a i.b -- i.sum }
+C(athGoodbye)    //c goodbye { i.a -- }
 C(athDlopen)   //c dlopen { a.name i.len i.flag -- a.lib }
 C(athDlsym)    //c dlsym  { a.name i.len i.lib -- a.func }
 // C(athDlexec)    //c dlexec  { a.struct -- a.func }
