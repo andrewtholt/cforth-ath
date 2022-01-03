@@ -505,6 +505,15 @@ cell example1(cell a, cell b) {
     return(a+b);
 }
 
+cell athGetenv(char *buffer, int len, char *name ) {
+    name[len]=NULL;
+    char *ptr = getenv(name);
+    int l=strlen(ptr);
+
+    void *p = strncpy(buffer,ptr,l);
+    return(l);
+}
+
 void athGoodbye(cell rc) {
 
     (void)exit(rc);
@@ -670,7 +679,8 @@ cell ((* const ccalls[])()) = {
 // ATH
 #ifdef ATH
 C(example1)    //c sum { i.a i.b -- i.sum }
-C(athGoodbye)    //c goodbye { i.a -- }
+C(athGoodbye)   //c goodbye { i.a -- }
+C(athGetenv)   //c getenv { a.name i.len a.buffer -- i.len }
 C(athDlopen)   //c dlopen { a.name i.len i.flag -- a.lib }
 C(athDlsym)    //c dlsym  { a.name i.len i.lib -- a.func }
 C(athDlclose)  //c dlclose { a.lib -- }
