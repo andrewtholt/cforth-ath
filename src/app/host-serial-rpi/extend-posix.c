@@ -506,7 +506,7 @@ cell example1(cell a, cell b) {
 }
 
 cell athGetenv(char *buffer, int len, char *name ) {
-    name[len]=NULL;
+    name[len]=0;
     char *ptr = getenv(name);
     int l=strlen(ptr);
 
