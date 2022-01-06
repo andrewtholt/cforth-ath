@@ -11,6 +11,10 @@
     fred /size os
 
     fred count type cr
+
+    fred /size cpu
+
+    fred count type cr
 ;
 
 tst
