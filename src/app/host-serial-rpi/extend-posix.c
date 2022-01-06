@@ -528,22 +528,21 @@ void athUname() {
     int rc = uname(&unameInfo);
 }
 
-cell athHostname(int len, char *name) {
-    strncpy(name, unameInfo.nodename, len);
+void athHostname(int len, char *name) {
 
-    return (strlen(unameInfo.nodename));
+    name[0] = strlen( unameInfo.nodename);
+    strncpy(&name[1], unameInfo.nodename, len);
 }
 
-cell athOS(int len, char *name) {
-    strncpy(name, unameInfo.sysname, len);
-
-    return (strlen(unameInfo.sysname));
+void athOS(int len, char *name) {
+    name[0] = strlen( unameInfo.nodename);
+    strncpy(&name[1], unameInfo.sysname, len);
 }
 
-cell athCPU(int len, char *name) {
-    strncpy(name, unameInfo.machine, len);
+void athCPU(int len, char *name) {
+    name[0] = strlen(unameInfo.machine);
+    strncpy(&name[1], unameInfo.machine, len);
 
-    return (strlen(unameInfo.machine));
 }
 
 /*
