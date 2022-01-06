@@ -520,6 +520,32 @@ void athGoodbye(cell rc) {
     return;
 }
 
+#include <sys/utsname.h>
+
+struct utsname unameInfo;
+
+void athUname() {
+    int rc = uname(&unameInfo);
+}
+
+cell athHostname(int len, char *name) {
+    strncpy(name, unameInfo.nodename, len);
+
+    return (strlen(unameInfo.nodename));
+}
+
+cell athOS(int len, char *name) {
+    strncpy(name, unameInfo.sysname, len);
+
+    return (strlen(unameInfo.sysname));
+}
+
+cell athCPU(int len, char *name) {
+    strncpy(name, unameInfo.machine, len);
+
+    return (strlen(unameInfo.machine));
+}
+
 /*
 void *athDlparams() {
 //    return &params;
@@ -680,6 +706,10 @@ cell ((* const ccalls[])()) = {
 #ifdef ATH
 C(example1)    //c sum { i.a i.b -- i.sum }
 C(athGoodbye)    //c goodbye { i.a -- }
+C(athUname)   //c uname { -- }
+C(athHostname) //c hostname { i.len a.buffer -- i.len }
+C(athOS) //c os { i.len a.buffer -- i.len }
+C(athCPU) //c cpu { i.len a.buffer -- i.len }
 C(athGetenv)   //c getenv { a.name i.len a.buffer -- i.len }
 C(athDlopen)   //c dlopen { a.name i.len i.flag -- a.lib }
 C(athDlsym)    //c dlsym  { a.name i.len i.lib -- a.func }
