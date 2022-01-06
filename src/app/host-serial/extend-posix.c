@@ -528,22 +528,21 @@ void athUname() {
     int rc = uname(&unameInfo);
 }
 
-cell athHostname(int len, char *name) {
-    strncpy(name, unameInfo.nodename, len);
+void athHostname(int len, char *name) {
 
-    return (strlen(unameInfo.nodename));
+    name[0] = strlen( unameInfo.nodename);
+    strncpy(&name[1], unameInfo.nodename, len);
 }
 
-cell athOS(int len, char *name) {
-    strncpy(name, unameInfo.sysname, len);
-
-    return (strlen(unameInfo.sysname));
+void athOS(int len, char *name) {
+    name[0] = strlen( unameInfo.nodename);
+    strncpy(&name[1], unameInfo.sysname, len);
 }
 
-cell athCPU(int len, char *name) {
-    strncpy(name, unameInfo.machine, len);
+void athCPU(int len, char *name) {
+    name[0] = strlen(unameInfo.machine);
+    strncpy(&name[1], unameInfo.machine, len);
 
-    return (strlen(unameInfo.machine));
 }
 
 /*
@@ -707,9 +706,9 @@ cell ((* const ccalls[])()) = {
 C(example1)    //c sum { i.a i.b -- i.sum }
 C(athGoodbye)   //c goodbye { i.a -- }
 C(athUname)   //c uname { -- }
-C(athHostname) //c hostname { i.len a.buffer -- i.len }
-C(athOS) //c os { i.len a.buffer -- i.len }
-C(athCPU) //c cpu { i.len a.buffer -- i.len }
+C(athHostname) //c hostname { i.len a.buffer --  }
+C(athOS) //c os { i.len a.buffer -- }
+C(athCPU) //c cpu { i.len a.buffer --  }
 C(athGetenv)   //c getenv { a.name i.len a.buffer -- i.len }
 C(athDlopen)   //c dlopen { a.name i.len i.flag -- a.lib }
 C(athDlsym)    //c dlsym  { a.name i.len i.lib -- a.func }
