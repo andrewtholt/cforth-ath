@@ -706,9 +706,9 @@ cell ((* const ccalls[])()) = {
 C(example1)    //c sum { i.a i.b -- i.sum }
 C(athGoodbye)    //c goodbye { i.a -- }
 C(athUname)   //c uname { -- }
-C(athHostname) //c hostname { i.len a.buffer -- i.len }
-C(athOS) //c os { i.len a.buffer -- i.len }
-C(athCPU) //c cpu { i.len a.buffer -- i.len }
+C(athHostname) //c hostname { i.len a.buffer --  }
+C(athOS) //c os { i.len a.buffer -- }
+C(athCPU) //c cpu { i.len a.buffer --  }
 C(athGetenv)   //c getenv { a.name i.len a.buffer -- i.len }
 C(athDlopen)   //c dlopen { a.name i.len i.flag -- a.lib }
 C(athDlsym)    //c dlsym  { a.name i.len i.lib -- a.func }
