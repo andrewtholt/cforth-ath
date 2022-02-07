@@ -17,10 +17,13 @@ echo "First make everything."
 make
 
 HERE=`pwd`
-
+ 
+BASE="./debian-${ARCH}"
 DEST="./debian-${ARCH}/usr/local/bin"
 LIBS="./debian-${ARCH}/usr/local/etc"
 DEBS="./debian-${ARCH}/DEBIAN"
+
+./mkControl.sh > ${BASE}/DEBIAN/control
 
 if [ ! -d ${DEBS} ];then
     mkdir -p ${DEBS}
