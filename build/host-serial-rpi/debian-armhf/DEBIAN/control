@@ -3,8 +3,10 @@ Section: misc
 Priority: extra
 Maintainer: Andrew Holt
 Architecture: armhf
-Version: 2.0
+Version: 2.2
 Description: Mitch Bradleys cforth
     1.0.0 first package
     1.0.1 Added forth script
     2.0 AFter merge with master
+    2.1 Some news words and sync across platforms.
+    2.2 MQTT

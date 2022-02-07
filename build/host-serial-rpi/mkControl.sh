@@ -1,11 +1,15 @@
 #!/bin/bash
-# set -x
+set -x
 VERSION=$(cat ./version.txt)
 
 HW=$(uname -m)
 
 if [ $HW = "x86_64" ]; then
     HW=amd64
+fi
+
+if [ $HW = "armv6l" ]; then
+    HW=armhf
 fi
 
 if [ $HW = "armv7l" ]; then

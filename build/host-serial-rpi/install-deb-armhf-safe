@@ -4,12 +4,13 @@
 
 LEN=`getconf LONG_BIT`
 
-if [ $LEN -ne 64 ]; then
+if [ $LEN -ne 32 ]; then
     echo "Attempting to build on wrong platform."
     exit 1
 fi
 
 ARCH=$(dpkg --print-architecture)
+
 echo "Build debian package for $ARCH"
 echo "First make everything."
 
@@ -17,22 +18,10 @@ echo "First make everything."
 make
 
 HERE=`pwd`
- 
-BASE="./debian-${ARCH}"
+
 DEST="./debian-${ARCH}/usr/local/bin"
 LIBS="./debian-${ARCH}/usr/local/etc"
-DEBS="./debian-${ARCH}/DEBIAN"
 
-./mkControl.sh > ${BASE}/DEBIAN/control
-
-if [ ! -d ${DEBS} ];then
-    mkdir -p ${DEBS}
-fi
-
-if [ ! -f ${DEBS}/control ]; then
-    echo "Fatal Error: No package control file"
-    exit 1
-fi
 
 if [ ! -d ${DEST} ]; then
     mkdir -p ${DEST}
