@@ -4,7 +4,7 @@
 
 LEN=`getconf LONG_BIT`
 
-if [ $LEN -ne 64 ]; then
+if [ $LEN -ne 32 ]; then
     echo "Attempting to build on wrong platform."
     exit 1
 fi

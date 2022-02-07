@@ -1,5 +1,6 @@
 #!/bin/bash
-set -x
+# set -x
+
 VERSION=$(cat ./version.txt)
 
 HW=$(uname -m)
