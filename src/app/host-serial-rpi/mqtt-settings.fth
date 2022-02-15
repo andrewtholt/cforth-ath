@@ -3,7 +3,13 @@
 : server$  ( -- $ )  " 192.168.10.124"  ;    
     
 : mqtt-server$  ( -- $ )  " server$" evaluate  ;    
-: mqtt-client-id$  ( -- $ )  " ESP8266 Forth"  ;    
+
+: default-client-id$  ( -- $ )  " MQTT Forth"  ;
+
+defer mqtt-client-id$
+
+' default-client-id$ to mqtt-client-id$
+
 : mqtt-username$  ( -- $ )  " "  ;    
 : mqtt-password$  ( -- $ )  " "  ;    
 : mqtt-will$  ( -- msg$ topic$ )  " "  " "  ;    
