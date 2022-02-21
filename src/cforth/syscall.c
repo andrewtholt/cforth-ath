@@ -26,7 +26,14 @@ void prerror(const char *s, cell *up)
 }
 
 cell dosyscall()  { return(unimplemented()); }
-int system() { return(unimplemented()); }
+
+int my_system(char *cmd) { 
+    int rc = system(cmd);
+
+    printf("%s %d\n", cmd,rc);
+    return(rc);
+//    return(unimplemented());
+}
 int chdir()  { return(unimplemented()); }
 
 void linemode() {}
