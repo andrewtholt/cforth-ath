@@ -5,6 +5,8 @@ fl ../../lib/dl.fth
 fl ../../lib/random.fth
 fl ../../lib/ilog2.fth
 fl ../../lib/tek.fth
+fl ../../cforth/printf.fth
+
 
 warning @ warning off
 : bye standalone?  if  restart  then  bye  ;
@@ -37,6 +39,9 @@ fl ../esp32/wifi.fth
 
 fl ../esp8266/xmifce.fth
 fl ../../lib/crc16.fth
+
+fl ./mqtt.fth
+
 fl ../../lib/xmodem.fth
 also modem
 : rx  ( -- )  pad  unused pad here - -  (receive)  #100 ms  ;

@@ -29,3 +29,4 @@ cscope.out
 .goutputstream-VMWAKZ
 cscope.out
 .gdb_history
+build/esp8266-rtos/build

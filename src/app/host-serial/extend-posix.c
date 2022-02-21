@@ -653,7 +653,7 @@ cell ((* const ccalls[])()) = {
 
   // Miscellaneous
   C(open_scanner)      //c open-scanner   { -- i.fd }
-  C(system)            //c system         { $ -- }
+  C(system)            //c system         { $ -- i.rc }
 #ifdef USE_FTDI
   // FTDI bit-banging
   C(ft_open_serial)    //c ft-open-com    { i.pid i.index -- i.handle }
