@@ -42,3 +42,6 @@ endif
 EXTRA_CLEAN += makegcalls glops.h gcalls.fth
 
 include $(TOPDIR)/src/app/host-serial-rpi/targets.mk
+
+$(info    API is $(API))
+
