@@ -546,10 +546,13 @@ char *athIpaddr(int len, char *buffer) {
 
         s=getnameinfo(ifa->ifa_addr,sizeof(struct sockaddr_in), &host[1], NI_MAXHOST, NULL, 0, NI_NUMERICHOST);
         if((strcmp(ifa->ifa_name,buffer)==0)&&(ifa->ifa_addr->sa_family==AF_INET)) {
+            /*
             printf("\tInterface : %s\n",ifa->ifa_name );
             printf("\tAddress   : %s\n", (char *)&host[1]);
+            */
 
             host[0] = (unsigned char)strlen(&host[1]);
+            break;
         }
     }
     freeifaddrs(ifaddr);
