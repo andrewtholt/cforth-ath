@@ -550,6 +550,7 @@ char *athIpaddr(int len, char *buffer) {
             printf("\tAddress   : %s\n", (char *)&host[1]);
 
             host[0] = (unsigned char)strlen(&host[1]);
+            break;
         }
     }
     freeifaddrs(ifaddr);
