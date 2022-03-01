@@ -1,5 +1,5 @@
 #!/bin/bash
-set -x
+# set -x
 VERSION=$(cat ./version.txt)
 
 HW=$(uname -m)
@@ -34,3 +34,8 @@ echo "    1.0.1 Added forth script"
 echo "    2.0 AFter merge with master"
 echo "    2.1 Some news words and sync across platforms."
 echo "    2.2 MQTT"
+echo "    2.2.1 Removed gpio in favour of wiring Pi."
+echo "    2.2.2 With code to set pull ups reverted above."
+echo "    2.2.3 mqtt-client-id$ now defferred."
+echo "    2.2.4 added system."
+

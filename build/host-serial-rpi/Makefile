@@ -16,3 +16,6 @@ endif
 LIBS += -lm -ldl
 
 include $(TOPDIR)/src/app/host-serial-rpi/targets.mk
+
+$(info    API is $(API))
+
