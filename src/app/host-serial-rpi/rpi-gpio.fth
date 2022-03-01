@@ -17,6 +17,20 @@
    swap 5 rshift           ( bitmask offset )
    gpio-base swap la+      ( bitmask base )
 ;
+\ Reference: https://datasheets.raspberrypi.com/bcm2835/bcm2835-peripherals.pdf
+\ Table 6-28 and following text starting on page 100
+
+\ GPPUD reg is $94, PUDCLKn is $98 and $9c (Table 6-1)
+0 constant pud-off
+1 constant pull-down
+2 constant pull-up
+: gpio-pull!  ( mode gpio# -- )
+   gpio>bit,base $98 +         ( mode bitmask reg )  \ Compute mask and PUDCLKn register address
+   rot gpio-base $94 + l!      ( bitmask reg )       \ Set GPPUD register
+   tuck  l!                    ( reg )               \ Assert clock in PUDCLKn register
+   pud-off gpio-base $94 + l!  ( reg )               \ Clear GPPUD register
+   0 swap l!                   ( )                   \ Deassert clock in PUDCLKn register
+;
 
 : gpio-set  ( gpio# -- )  gpio>bit,base $1c +  l!  ;
 : gpio-clr  ( gpio# -- )  gpio>bit,base $28 +  l!  ;

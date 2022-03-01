@@ -3,10 +3,14 @@ Section: misc
 Priority: extra
 Maintainer: Andrew Holt
 Architecture: armhf
-Version: 2.2
+Version: 2.2.5
 Description: Mitch Bradleys cforth
     1.0.0 first package
     1.0.1 Added forth script
     2.0 AFter merge with master
     2.1 Some news words and sync across platforms.
     2.2 MQTT
+    2.2.1 Removed gpio in favour of wiring Pi.
+    2.2.2 With code to set pull ups reverted above.
+    2.2.3 mqtt-client-id$ now defferred.
+    2.2.4 added system.
