@@ -11,7 +11,6 @@ if [ $? -eq 0 ]; then
     exit 1
 fi
 
-exit 0
 echo ": version s\" $GIT_VERSION\" ;" > ../../src/app/host-serial/version.fth
 echo ": .version version type cr ;" >> ../../src/app/host-serial/version.fth
 
