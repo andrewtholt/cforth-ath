@@ -44,4 +44,7 @@ EXTRA_CLEAN += makegcalls glops.h gcalls.fth
 include $(TOPDIR)/src/app/host-serial/targets.mk
 
 $(info    API is $(API))
+GIT_VERSION := "$(shell git describe --abbrev=4 --dirty --always --tags)"
+$(info    VER is $(GIT_VERSION))
+
 

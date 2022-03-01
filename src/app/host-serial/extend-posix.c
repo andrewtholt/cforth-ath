@@ -521,8 +521,44 @@ void athGoodbye(cell rc) {
 }
 
 #include <sys/utsname.h>
+#include <ifaddrs.h>
 
 struct utsname unameInfo;
+
+static char host[NI_MAXHOST];
+char *athIpaddr(int len, char *buffer) {
+    struct ifaddrs *ifaddr, *ifa;
+    int family, s;
+
+    if (getifaddrs(&ifaddr) == -1) {
+        perror("getifaddrs");
+        
+        return NULL;
+    }
+
+    buffer[len]=0;
+    memset(host, NI_MAXHOST,0);
+
+    for (ifa = ifaddr; ifa != NULL; ifa = ifa->ifa_next) {
+        if (ifa->ifa_addr == NULL) {
+            continue;
+        }
+
+        s=getnameinfo(ifa->ifa_addr,sizeof(struct sockaddr_in), &host[1], NI_MAXHOST, NULL, 0, NI_NUMERICHOST);
+        if((strcmp(ifa->ifa_name,buffer)==0)&&(ifa->ifa_addr->sa_family==AF_INET)) {
+            /*
+            printf("\tInterface : %s\n",ifa->ifa_name );
+            printf("\tAddress   : %s\n", (char *)&host[1]);
+            */
+
+            host[0] = (unsigned char)strlen(&host[1]);
+            break;
+        }
+    }
+    freeifaddrs(ifaddr);
+
+    return host;
+}
 
 void athUname() {
     int rc = uname(&unameInfo);
@@ -707,6 +743,7 @@ C(example1)    //c sum { i.a i.b -- i.sum }
 C(athGoodbye)   //c goodbye { i.a -- }
 C(athUname)   //c uname { -- }
 C(athHostname) //c hostname { i.len a.buffer --  }
+C(athIpaddr) //c ipaddr { i.len a.buffer -- a.buffer }
 C(athOS) //c os { i.len a.buffer -- }
 C(athCPU) //c cpu { i.len a.buffer --  }
 C(athGetenv)   //c getenv { a.name i.len a.buffer -- i.len }
