@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -x
+# set -x
 
 PKG=$(ls -tr *.deb | tail -1)
 
