@@ -27,7 +27,7 @@ void prerror(const char *s, cell *up)
 
 cell dosyscall()  { return(unimplemented()); }
 
-int system() { return(unimplemented()); }
+// int system() { return(unimplemented()); }
 
 #ifdef __linux__
 
