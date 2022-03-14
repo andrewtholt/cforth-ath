@@ -4,6 +4,7 @@ fl ./mqtt-settings.fth
 fl ./mqtt.fth
 
 fl ./version.fth
+fl ../../lib/ftoi.fth
 
 : sha256  ( dst-adr src-adr src-len -- )
    sha256-open >r           ( dst-adr src-adr len  r: context )
