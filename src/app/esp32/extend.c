@@ -173,8 +173,7 @@ cell ((* const ccalls[])()) = {
 
 	C(get_wifi_mode)	//c wifi-mode@ { -- i.mode }
 	C(wifi_open)		//c wifi-open { $ssid $password i.timeout -- i.error? }
-    C(ath_wifi_connected)  //c wifi-connected?  { -- i.flag }
-
+    C(ath_wifi_connected)  //c wifi-connected? { -- i.flag }
 	C(set_log_level)	//c log-level! { i.level $component -- }
 
   // LWIP sockets

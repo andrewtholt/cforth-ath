@@ -520,6 +520,42 @@ void athGoodbye(cell rc) {
     return;
 }
 
+#include <time.h>
+cell athGetDow() {
+    time_t t = time(NULL);
+    struct tm *tm = localtime(&t);
+
+    return tm->tm_wday;
+}
+
+cell athGetDoy() {
+    time_t t = time(NULL);
+    struct tm *tm = localtime(&t);
+
+    return(tm->tm_yday+1);
+}
+
+cell athGetHour() {
+    time_t t = time(NULL);
+    struct tm *tm = localtime(&t);
+
+    return tm->tm_hour;
+}
+
+cell athGetMinutes() {
+    time_t t = time(NULL);
+    struct tm *tm = localtime(&t);
+
+    return tm->tm_min;
+}
+
+cell athGetSeconds() {
+    time_t t = time(NULL);
+    struct tm *tm = localtime(&t);
+
+    return tm->tm_sec;
+}
+
 #include <sys/utsname.h>
 #include <ifaddrs.h>
 
@@ -750,6 +786,13 @@ C(athGetenv)   //c getenv { a.name i.len a.buffer -- i.len }
 C(athDlopen)   //c dlopen { a.name i.len i.flag -- a.lib }
 C(athDlsym)    //c dlsym  { a.name i.len i.lib -- a.func }
 C(athDlclose)  //c dlclose { a.lib -- }
+
+C(athGetDow)  //c tm_dow {  -- i.dow }
+C(athGetDoy)  //c tm_doy {  -- i.doy }
+
+C(athGetHour)  //c tm_hour {  -- i.hour }
+C(athGetMinutes)  //c tm_min {  -- i.min }
+C(athGetSeconds)  //c tm_sec {  -- i.sec }
 #endif
 
 #ifdef OPENGL
