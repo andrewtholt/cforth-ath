@@ -492,9 +492,34 @@ struct params {
     void *param[MAX_PARAM];
 } ;
 
+#include<signal.h>
+
+int last_signal=0;
+
+void sig_handler(int signo) {
+  if (signo == SIGPIPE)
+    printf("received SIGPIPE\n");
+    last_signal = signo;
+}
+
+cell setSignal(cell sig) {
+
+    if (signal((int)sig, sig_handler) == SIG_ERR) {
+        printf("\ncan't catch %d\n", (int)sig);
+    }
+}
+
+cell getSignal() {
+    int ret = last_signal;
+
+    last_signal = 0;
+
+    return ret;
+}
 
 cell example1(cell a, cell b) {
     printf("Example 1\n");
+
 
 //     params.returnCount = 1;
 //     params.paramCount = 2;
@@ -502,6 +527,7 @@ cell example1(cell a, cell b) {
 //     params.param[1]=a;
 
 //    return(a+b);
+
     return(a+b);
 }
 
@@ -776,6 +802,8 @@ cell ((* const ccalls[])()) = {
 // ATH
 #ifdef ATH
 C(example1)    //c sum { i.a i.b -- i.sum }
+C(setSignal)   //c set-signal { i.a --  }
+C(getSignal)   //c get-signal { -- i.a }
 C(athGoodbye)   //c goodbye { i.a -- }
 C(athUname)   //c uname { -- }
 C(athHostname) //c hostname { i.len a.buffer --  }
@@ -793,6 +821,7 @@ C(athGetDoy)  //c tm_doy {  -- i.doy }
 C(athGetHour)  //c tm_hour {  -- i.hour }
 C(athGetMinutes)  //c tm_min {  -- i.min }
 C(athGetSeconds)  //c tm_sec {  -- i.sec }
+C(getpid) //c getpid { -- i.pid }
 #endif
 
 #ifdef OPENGL
