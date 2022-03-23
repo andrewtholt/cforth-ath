@@ -363,15 +363,14 @@ static esp_err_t wifi_event_handler(void *ctx, system_event_t *event)
 }
 
 cell ath_wifi_connected() {
-    /*
+
     cell failFlag = -1;
 
     if((xEventGroupGetBits(wifi_event_group) & CONNECTED_BIT) != 0 ) {
         failFlag = 0;
     }
-    */
 
-    return connected;;
+    return failFlag;;
 }
 
 cell wifi_open(cell timeout, char *password, char *ssid)
