@@ -534,9 +534,16 @@ cell example1(cell a, cell b) {
 cell athGetenv(char *buffer, int len, char *name ) {
     name[len]=0;
     char *ptr = getenv(name);
-    int l=strlen(ptr);
 
-    void *p = strncpy(buffer,ptr,l);
+    int l=0;
+
+    if ( ptr == NULL) {
+        l=0;
+    } else {
+        l=strlen(ptr);
+
+        void *p = strncpy(buffer,ptr,l);
+    }
     return(l);
 }
 
