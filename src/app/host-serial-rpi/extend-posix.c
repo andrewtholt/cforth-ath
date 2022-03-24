@@ -496,21 +496,30 @@ struct params {
 cell example1(cell a, cell b) {
     printf("Example 1\n");
 
+
 //     params.returnCount = 1;
 //     params.paramCount = 2;
 //     params.param[0]=b;
 //     params.param[1]=a;
 
 //    return(a+b);
+
     return(a+b);
 }
 
 cell athGetenv(char *buffer, int len, char *name ) {
     name[len]=0;
     char *ptr = getenv(name);
-    int l=strlen(ptr);
+
+    int l=0;
+
+    if ( ptr == NULL) {
+        l=0;
+    } else {
+        l=strlen(ptr);
 
     void *p = strncpy(buffer,ptr,l);
+    }
     return(l);
 }
 
@@ -521,19 +530,11 @@ void athGoodbye(cell rc) {
 }
 
 #include <time.h>
-
-cell athGetHour() {
-    time_t t = time(NULL);
-    struct tm *tm = localtime(&t);
-
-    return tm->tm_hour;
-}
-
 cell athGetDow() {
     time_t t = time(NULL);
     struct tm *tm = localtime(&t);
 
-    return (int)tm->tm_wday;
+    return tm->tm_wday;
 }
 
 cell athGetDoy() {
@@ -541,6 +542,13 @@ cell athGetDoy() {
     struct tm *tm = localtime(&t);
 
     return(tm->tm_yday+1);
+}
+
+cell athGetHour() {
+    time_t t = time(NULL);
+    struct tm *tm = localtime(&t);
+
+    return tm->tm_hour;
 }
 
 cell athGetMinutes() {
@@ -787,11 +795,14 @@ C(athGetenv)   //c getenv { a.name i.len a.buffer -- i.len }
 C(athDlopen)   //c dlopen { a.name i.len i.flag -- a.lib }
 C(athDlsym)    //c dlsym  { a.name i.len i.lib -- a.func }
 C(athDlclose)  //c dlclose { a.lib -- }
-C(athGetHour)  //c tm_hour { -- i.hour }
+
 C(athGetDow)  //c tm_dow { -- i.dow }
 C(athGetDoy)  //c tm_doy { -- i.doy }
+
+C(athGetHour)  //c tm_hour {  -- i.hour }
 C(athGetMinutes)  //c tm_min { -- i.min }
 C(athGetSeconds)  //c tm_sec { -- i.sec }
+C(getpid) //c getpid { -- i.pid }
 #endif
 
 #ifdef OPENGL
