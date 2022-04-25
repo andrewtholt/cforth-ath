@@ -62,6 +62,7 @@ int main(int argc, char **argv)
     (void)signal(SIGFPE, signal_handler);
     (void)signal(SIGILL, signal_handler);
     (void)signal(SIGSEGV, signal_handler);
+    (void)signal(SIGPIPE, signal_handler);
     if ((caught = sigsetjmp(jmp_buffer, 1)) != 0) {
 //    if ((caught = setjmp(jmp_buffer)) != 0) {
 	switch (caught)

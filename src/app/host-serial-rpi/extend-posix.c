@@ -496,21 +496,30 @@ struct params {
 cell example1(cell a, cell b) {
     printf("Example 1\n");
 
+
 //     params.returnCount = 1;
 //     params.paramCount = 2;
 //     params.param[0]=b;
 //     params.param[1]=a;
 
 //    return(a+b);
+
     return(a+b);
 }
 
 cell athGetenv(char *buffer, int len, char *name ) {
     name[len]=0;
     char *ptr = getenv(name);
-    int l=strlen(ptr);
+
+    int l=0;
+
+    if ( ptr == NULL) {
+        l=0;
+    } else {
+        l=strlen(ptr);
 
     void *p = strncpy(buffer,ptr,l);
+    }
     return(l);
 }
 
@@ -518,6 +527,42 @@ void athGoodbye(cell rc) {
 
     (void)exit(rc);
     return;
+}
+
+#include <time.h>
+cell athGetDow() {
+    time_t t = time(NULL);
+    struct tm *tm = localtime(&t);
+
+    return tm->tm_wday;
+}
+
+cell athGetDoy() {
+    time_t t = time(NULL);
+    struct tm *tm = localtime(&t);
+
+    return(tm->tm_yday+1);
+}
+
+cell athGetHour() {
+    time_t t = time(NULL);
+    struct tm *tm = localtime(&t);
+
+    return tm->tm_hour;
+}
+
+cell athGetMinutes() {
+    time_t t = time(NULL);
+    struct tm *tm = localtime(&t);
+
+    return tm->tm_min;
+}
+
+cell athGetSeconds() {
+    time_t t = time(NULL);
+    struct tm *tm = localtime(&t);
+
+    return tm->tm_sec;
 }
 
 #include <sys/utsname.h>
@@ -546,8 +591,10 @@ char *athIpaddr(int len, char *buffer) {
 
         s=getnameinfo(ifa->ifa_addr,sizeof(struct sockaddr_in), &host[1], NI_MAXHOST, NULL, 0, NI_NUMERICHOST);
         if((strcmp(ifa->ifa_name,buffer)==0)&&(ifa->ifa_addr->sa_family==AF_INET)) {
+            /*
             printf("\tInterface : %s\n",ifa->ifa_name );
             printf("\tAddress   : %s\n", (char *)&host[1]);
+            */
 
             host[0] = (unsigned char)strlen(&host[1]);
             break;
@@ -747,9 +794,15 @@ C(athCPU) //c cpu { i.len a.buffer --  }
 C(athGetenv)   //c getenv { a.name i.len a.buffer -- i.len }
 C(athDlopen)   //c dlopen { a.name i.len i.flag -- a.lib }
 C(athDlsym)    //c dlsym  { a.name i.len i.lib -- a.func }
-// C(athDlexec)    //c dlexec  { a.struct -- a.func }
-// C(athDlparams) //c dl-params { -- a.p }
 C(athDlclose)  //c dlclose { a.lib -- }
+
+C(athGetDow)  //c tm_dow { -- i.dow }
+C(athGetDoy)  //c tm_doy { -- i.doy }
+
+C(athGetHour)  //c tm_hour {  -- i.hour }
+C(athGetMinutes)  //c tm_min { -- i.min }
+C(athGetSeconds)  //c tm_sec { -- i.sec }
+C(getpid) //c getpid { -- i.pid }
 #endif
 
 #ifdef OPENGL

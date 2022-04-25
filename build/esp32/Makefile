@@ -2,8 +2,8 @@
 
 default: forth.elf
 
-# TOPDIR=../..
-TOPDIR=$(HOME)/Source/Forth/cforth
+TOPDIR=../..
+UPDIR=$(realpath $(TOPDIR)/..)
 
 CONFIG += -DBITS32
 CONFIG += -DFLOATING -DMORE_FP
@@ -15,13 +15,13 @@ CC := gcc
 
 # Change these to reflect the locations of external stuff on your system,
 # either here or on the command line
-ESP_TOP = /home/andrewh/esp
-XTGCCPATH ?= $(ESP_TOP)/xtensa-esp32-elf/bin/
-CROSS ?= $(XTGCCPATH)xtensa-esp32-elf-
+XTGCC_PARENT_PATH ?= $(UPDIR)
+# XTGCCPATH ?= $(XTGCC_PARENT_PATH)/xtensa-esp32-elf/bin/
 
 # ESP32 SDK
-# IDF_PATH ?= $(TOPDIR)/../esp-idf
-IDF_PATH ?= $(HOME)/esp/esp-idf
+ESP_IDF_PARENT_PATH ?= $(UPDIR)
+ESP_IDF_VERSION ?= v3.1.4
+IDF_PATH ?= $(ESP_IDF_PARENT_PATH)/esp-idf-$(ESP_IDF_VERSION)/
 
 CFORTH_PATH ?= $(abspath $(TOPDIR)/build/esp32)
 
@@ -30,7 +30,7 @@ include $(TOPDIR)/src/app/esp32/targets.mk
 ESP_IDF_PATHS:=IDF_PATH="$(IDF_PATH)" CFORTH_PATH="$(CFORTH_PATH)" PATH="$(PATH):$(XTGCCPATH)"
 
 forth.elf: app.o
-	@IDF_PATH=$(IDF_PATH) CFORTH_PATH=$(CFORTH_PATH) make --no-print-directory -C sdk_build
+	@$(ESP_IDF_PATHS) make --no-print-directory -C sdk_build
 
 menuconfig:
 	@$(ESP_IDF_PATHS) make -C sdk_build menuconfig
@@ -48,10 +48,8 @@ ifneq ($(COMPORT),)
 	ESPPORT_OVERRIDE = ESPPORT=$(COMPORT)
 endif
 
-# ESPPORT_OVERRIDE=/dev/ttyUSB0
-
 flash: app.o
-	@IDF_PATH=$(IDF_PATH) CFORTH_PATH=$(CFORTH_PATH) $(ESPPORT_OVERRIDE) make --no-print-directory -C sdk_build flash
+	@$(ESP_IDF_PATHS) $(ESPPORT_OVERRIDE) make --no-print-directory -C sdk_build flash
 
 # In many build setups, including native Linux, "make flash" per above will work.
 # It fails inside Docker on a Windows host due to the lack of host USB serial port access.

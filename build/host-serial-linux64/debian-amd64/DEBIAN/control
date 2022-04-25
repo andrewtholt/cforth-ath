@@ -3,7 +3,7 @@ Section: misc
 Priority: extra
 Maintainer: Andrew Holt
 Architecture: amd64
-Version: 2.2.4
+Version: 2.2.7
 Description: Mitch Bradleys cforth
     1.0.0 first package
     1.0.1 Added forth script
@@ -13,3 +13,4 @@ Description: Mitch Bradleys cforth
     2.2.1 defer mqtt-client-id$
     2.2.2 Added system.
     2.2.4 Added ipaddr.
+    2.2.5 Removed dubug from ipaddr.

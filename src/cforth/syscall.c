@@ -27,6 +27,10 @@ void prerror(const char *s, cell *up)
 
 cell dosyscall()  { return(unimplemented()); }
 
+// int system() { return(unimplemented()); }
+
+#ifdef __linux__
+
 int my_system(char *cmd) { 
     int rc = system(cmd);
 
@@ -34,6 +38,8 @@ int my_system(char *cmd) {
     return(rc);
 //    return(unimplemented());
 }
+
+#endif
 int chdir()  { return(unimplemented()); }
 
 void linemode() {}
