@@ -8,7 +8,11 @@
 : mqtt-client-id$  ( -- $ )  " ESP8266-rtos Forth"  ;
 : mqtt-username$  ( -- $ )  " "  ;
 : mqtt-password$  ( -- $ )  " "  ;
-: mqtt-will$  ( -- msg$ topic$ )  " "  " "  ;
+
+
+\ : mqtt-will$  ( -- msg$ topic$ )  " "  " "  ;
+defer mqtt-will$
+
 0 value mqtt-will-qos     \ 0, 1, 2, 3
 0 value mqtt-will-retain  \ 0 or 1
 0 value mqtt-clean-session
@@ -19,10 +23,15 @@
 defer handle-peer-data
 /mqtt-buffer buffer: mqtt-buffer
 
+
+0 value lwip-read-count
+
 : do-tcp-poll  ( fd -- )
    >r
    #50 ms
    mqtt-buffer /mqtt-buffer r@ lwip-read  ( count )
+   dup to lwip-read-count
+
    dup 0>  if
       mqtt-buffer swap  r@ handle-peer-data
    else

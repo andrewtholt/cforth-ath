@@ -20,6 +20,8 @@ warning !
    cr ." CForth built " .built
    ."  from " .commit
    cr
+
+   ." esp8266-rtos" cr
 ;
 
 fl gpio.fth

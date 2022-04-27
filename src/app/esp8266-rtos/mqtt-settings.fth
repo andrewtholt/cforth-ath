@@ -6,7 +6,11 @@
 : mqtt-client-id$  ( -- $ )  " ESP8266 Forth"  ;    
 : mqtt-username$  ( -- $ )  " "  ;    
 : mqtt-password$  ( -- $ )  " "  ;    
-: mqtt-will$  ( -- msg$ topic$ )  " "  " "  ;    
+
+\ : mqtt-will$  ( -- msg$ topic$ )  " "  " "  ;    
+
+defer mqtt-will$
+
 0 value mqtt-will-qos     \ 0, 1, 2, 3    
 0 value mqtt-will-retain  \ 0 or 1    
 0 value mqtt-clean-session    
