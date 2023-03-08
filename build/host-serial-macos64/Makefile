@@ -19,7 +19,8 @@ all: default
 TOPDIR=../..
 
 CONFIG += -DBITS64
-CONFIG += -DFLOATING -DMOREFP
+# CONFIG += -DFLOATING -DMOREFP -D__APPLE__
+CONFIG += -DMOREFP -D__APPLE__
 
 ifeq ($(FTDI),y)
 # To get libusb-1.0 on MacOS, download and upack a source tarball from
