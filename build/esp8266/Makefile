@@ -1,6 +1,6 @@
 # Builds CForth for ESP8266
 
-TOPDIR=$(HOME)/Source/Forth/cforth
+TOPDIR=$(HOME)/Source/Forth/cforth-ath
 # TOPDIR=../..
 
 # CONFIG += -DBITS32 -DT16

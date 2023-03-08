@@ -1,6 +1,10 @@
 \ Replace with your WiFi credentials and download to
 \ the file wifi-on in the ESP8266's file system
-" MySSID" " MyPassword" station-connect
+
+" HoltAtHome4" " anthony050192" station-connect
+
+ipaddr@ .ipaddr
 
 \ DNS name or dotted decimal for MQTT server
-:noname  " 192.168.2.11"  ; to mqtt-server$
+:noname  " 192.168.10.124"  ; to mqtt-server$
+

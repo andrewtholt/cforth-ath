@@ -1,11 +1,10 @@
 .( MQTT settings ) cr
 
-: server$  ( -- $ )  " 192.168.10.124"  ;    
-    
-: mqtt-server$  ( -- $ )  " server$" evaluate  ;    
-: mqtt-client-id$  ( -- $ )  " ESP8266 Forth"  ;    
-: mqtt-username$  ( -- $ )  " "  ;    
-: mqtt-password$  ( -- $ )  " "  ;    
+:noname ( -- $ )  " 192.168.10.124"  ; to mqtt-server$
+:noname  ( -- $ )  " ESP8266 Forth"  ; to mqtt-client-id$
+
+:noname  ( -- $ )  " "  ; to mqtt-username$
+:noname  ( -- $ )  " "  ; to mqtt-password$
 
 \ : mqtt-will$  ( -- msg$ topic$ )  " "  " "  ;    
 

@@ -1,4 +1,4 @@
 #!/bin/bash
-
-COMPORT=/dev/ttyUSB0 ESPBAUD=115200 make flash
+set -x
+COMPORT=/dev/$1 ESPBAUD=115200 make flash
 

@@ -17,8 +17,9 @@ warning !
 
 : banner  ( -- )
    cr ." CForth built " .built
-   ."  from " .commit
-   cr
+   ."  from " .commit cr
+
+   ." ESP32" cr
 ;
 
 \ m-emit is defined in textend.c

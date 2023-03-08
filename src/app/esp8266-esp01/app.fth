@@ -73,28 +73,14 @@ fl wifi.fth
 fl ../../lib/redirect.fth
 fl tcpnew.fth
 
-fl ../../lib/url.fth
-\ fl serve-sensors.fth
-\ fl serve-hcsr04.fth
-
-\ fl car2.fth
-
-\ Measures NTC thermistor on channel 2 pulled up with 10K
-\ against 2:1 voltage divider on channel 3.
-: ads-temp@  ( -- n )  3 ads-channel@ w->n  ;
-
-\ i.scl i.sda
-\ 
-: init-i2c  ( -- )  1 2 i2c-setup  ;
-
 : .commit  ( -- )  'version cscount type  ;
 
 : .built  ( -- )  'build-date cscount type  ;
 
 : banner  ( -- )
    cr ." CForth built " .built
-   ."  From " .commit
-   cr
+   ."  From " .commit cr
+   ." ESP01" cr
 ;
 
 \ Replace 'quit' to make CForth auto-run some application code
@@ -107,55 +93,17 @@ fl ../../lib/url.fth
 ;
 : load-startup-file  ( -- )  " start" included   ;
 
-fl ${CBP}/lib/mqtt.fth
+\ fl ${CBP}/lib/mqtt.fth
+fl mqtt.fth
 
 : app
    banner  hex
    interrupt?  if  quit  then
-   init-i2c
    ['] load-startup-file catch drop
    quit
 ;
 
 alias id: \
 
-fl ${CBP}/lib/fb.fth
-fl ${CBP}/lib/font5x7.fth
-fl ${CBP}/lib/ssd1306.fth
-: init-wemos-oled  ( -- )
-   1 2 i2c-setup
-   ssd-init
-;
-: test-wemos-oled  ( -- )
-   init-wemos-oled
-   #20 0  do  i (u.)  fb-type "  Hello" fb-type  fb-cr  loop
-;
-
-0 [if]
-\ Open Firmware stuff; omit if you don't need it
-fl ${CBP}/ofw/loadofw.fth      \ Mostly platform-independent
-fl ofw-rootnode.fth \ ESP8266-specific
-
-fl sdspi.fth
-
--1 value hspi-cs   \ -1 to use hardware CS mode, 8 to use pin8 with software
-
-' spi-transfer to spi-out-in
-' spi-bits@    to spi-bits-in
-
-: sd-init  ( -- )
-   0 true #100000 hspi-cs spi-open
-   ['] spi-transfer to spi-out-in
-   ['] spi-bits@    to spi-bits-in
-   sd-card-init
-;
-[then]
-
-4 constant eth-cs-gpio  \ Depends on hardware wiring
-\ The MAC address of my first-article Sun2 Ethernet card
-create s2mac  8 c, 0 c, $20 c, 1 c, 2 c, $5b c,
-: start-net  ( -- )
-   s2mac eth-cs-gpio open-ethernet drop
-;
 
 " app.dic" save

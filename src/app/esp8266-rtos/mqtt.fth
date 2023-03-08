@@ -2,13 +2,17 @@
 \ time from the wifi-on file
 
 \ XXX get this from the file system
-: server$  ( -- $ )  " 192.168.10.124"  ;
+\ : server$  ( -- $ )  " 192.168.10.124"  ;
+\ 
+\ : mqtt-server$  ( -- $ )  " server$" evaluate  ;
+\ : mqtt-client-id$  ( -- $ )  " ESP8266-rtos Forth"  ;
+\ : mqtt-username$  ( -- $ )  " "  ;
+\ : mqtt-password$  ( -- $ )  " "  ;
 
-: mqtt-server$  ( -- $ )  " server$" evaluate  ;
-: mqtt-client-id$  ( -- $ )  " ESP8266-rtos Forth"  ;
-: mqtt-username$  ( -- $ )  " "  ;
-: mqtt-password$  ( -- $ )  " "  ;
-
+defer mqtt-server$
+defer mqtt-client-id$
+defer mqtt-username$
+defer mqtt-password$
 
 \ : mqtt-will$  ( -- msg$ topic$ )  " "  " "  ;
 defer mqtt-will$

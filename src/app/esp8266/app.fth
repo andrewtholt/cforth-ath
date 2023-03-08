@@ -1,5 +1,5 @@
 \ Load file for application-specific Forth extensions
-
+.( HELLO ) cr cr
 fl ../../lib/misc.fth
 fl ../../lib/dl.fth
 fl ../../lib/random.fth
@@ -85,11 +85,11 @@ previous
 
 fl files.fth
 \ fl ../../sensors/vl6180x.fth
-fl ../../sensors/ds18x20.fth
-fl ../../sensors/ads1115.fth
-fl ../../sensors/bme280.fth
-fl ../../sensors/pca9685.fth
-fl hcsr04.fth
+\ fl ../../sensors/ds18x20.fth
+\ fl ../../sensors/ads1115.fth
+\ fl ../../sensors/bme280.fth
+\ fl ../../sensors/pca9685.fth
+\ fl hcsr04.fth
 
 fl wifi.fth
 
@@ -98,13 +98,13 @@ fl tcpnew.fth
 
 fl ../../lib/url.fth
 \ fl serve-sensors.fth
-fl serve-hcsr04.fth
+\ fl serve-hcsr04.fth
 
-fl car2.fth
+\ fl car2.fth
 
 \ Measures NTC thermistor on channel 2 pulled up with 10K
 \ against 2:1 voltage divider on channel 3.
-: ads-temp@  ( -- n )  3 ads-channel@ w->n  ;
+\ : ads-temp@  ( -- n )  3 ads-channel@ w->n  ;
 
 \ i.scl i.sda
 \ 
@@ -129,6 +129,9 @@ fl car2.fth
    false
 ;
 : load-startup-file  ( -- )  " start" included   ;
+
+\ fl ${CBP}/lib/mqtt.fth
+fl mqtt.fth
 
 : app
    banner  hex

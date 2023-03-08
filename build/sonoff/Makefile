@@ -13,9 +13,10 @@ CC := gcc
 # either here or on the command line, e.g. COMPORT=COM27 make download
 SDK_PARENT_PATH ?= $(UPDIR)
 NODEMCU_PARENT_PATH ?= $(UPDIR)
-COMPORT ?= /dev/ttyS4
+# COMPORT ?= /dev/ttyS4
+COMPORT ?= /dev/ttyUSB1
 FM ?= dout
-FS ?= 8m
+FS ?= 2m
 
 APPPATH = $(TOPDIR)/src/app/sonoff
 VPATH +=  $(APPPATH)
