@@ -16,17 +16,28 @@ forth
 meta
 makebi
 makename
-dict.h
-dicthdr.h
-prims.h
-userarea.h
-vars.h
 date.c
 version
 .DS_Store
+<<<<<<< HEAD
 cscope.out
 
 .goutputstream-VMWAKZ
 cscope.out
 .gdb_history
 build/esp8266-rtos/build
+=======
+
+# platformio build tree
+.pio
+
+# created by makename
+prims.h
+vars.h
+init.x
+
+# created by makebi
+dicthdr.h
+dict.h
+userarea.h
+>>>>>>> upstream/master

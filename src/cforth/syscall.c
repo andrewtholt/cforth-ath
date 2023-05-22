@@ -25,6 +25,7 @@ void prerror(const char *s, cell *up)
     }
 }
 
+#ifndef NOSYSCALL
 cell dosyscall()  { return(unimplemented()); }
 
 // int system() { return(unimplemented()); }
@@ -41,6 +42,7 @@ int my_system(char *cmd) {
 
 #endif
 int chdir()  { return(unimplemented()); }
+#endif
 
 void linemode() {}
 void keymode() {}

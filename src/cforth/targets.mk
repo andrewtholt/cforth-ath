@@ -137,9 +137,9 @@ forth: $(BASEOBJS) $(HOSTOBJS)
 # and file I/O.  It is used in the compilation tools but not in the
 # embeddable version (embed.o).
 
-extend.o: $(EXTENDSRC) $(FINC) makeccalls
-	@echo CC $<
-	@$(CC) $(CFLAGS) -c $(EXTENDSRC) -o $@
+extend.o ccalls.fth: $(EXTENDSRC) $(FINC) makeccalls
+	@echo CC $(EXTENDSRC)
+	@$(CC) $(CFLAGS) -c $(EXTENDSRC) -o extend.o
 	@$(CC) $(CFLAGS) -E -C -c $(EXTENDSRC) | ./makeccalls >ccalls.fth
 
 # This rule builds a date stamp object that you can include in the image
@@ -183,8 +183,8 @@ makeccalls: makeccalls.c
 	@echo CC $<
 	@$(CC) -o makeccalls $<
 
-# clean::
-# 	@rm -f $(ARTIFACTS) forth forth.dic app.dic $(EXTRA_CLEAN)
+clean::
+	@rm -f $(ARTIFACTS) forth forth.dic app.dic $(EXTRA_CLEAN)
 
 tidy:
 	@rm -f $(ARTIFACTS)
