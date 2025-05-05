@@ -1,0 +1,17 @@
+example1    //c sum { i.a i.b -- i.sum }
+athGoodbye   //c goodbye { i.a -- }
+athUname   //c uname { -- }
+athHostname //c hostname { i.len a.buffer --  }
+athIpaddr //c ipaddr { i.len a.buffer -- a.buffer }
+athOS //c os { i.len a.buffer -- }
+athCPU //c cpu { i.len a.buffer --  }
+athGetenv   //c getenv { a.name i.len a.buffer -- i.len }
+athDlopen   //c dlopen { a.name i.len i.flag -- a.lib }
+athDlsym    //c dlsym  { a.name i.len i.lib -- a.func }
+athDlclose  //c dlclose { a.lib -- }
+athGetDow  //c tm_dow {  -- i.dow }
+athGetDoy  //c tm_doy {  -- i.doy }
+athGetHour  //c tm_hour {  -- i.hour }
+athGetMinutes  //c tm_min {  -- i.min }
+athGetSeconds  //c tm_sec {  -- i.sec }
+getpid //c getpid { -- i.pid }
