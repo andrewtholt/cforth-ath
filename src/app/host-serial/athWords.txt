@@ -3,8 +3,8 @@ athGoodbye   //c goodbye { i.a -- }
 athUname   //c uname { -- }
 athHostname //c hostname { i.len a.buffer --  }
 athIpaddr //c ipaddr { i.len a.buffer -- a.buffer }
-athOS //c os { i.len a.buffer -- }
-athCPU //c cpu { i.len a.buffer --  }
+athOS //c os { a.buffer i.len -- }
+athCPU //c cpu { a.buffer i.len --  }
 athGetenv   //c getenv { a.name i.len a.buffer -- i.len }
 athDlopen   //c dlopen { a.name i.len i.flag -- a.lib }
 athDlsym    //c dlsym  { a.name i.len i.lib -- a.func }
