@@ -637,6 +637,9 @@ void *athDlopen( int flags, int len, char *filename ) {
     void *res=NULL;
 
     filename[len]='\0';
+    /*
+     * See dlopen(3) for definition of flags.
+     */
     res=dlopen(filename, flags);
 
     char *err = dlerror();
