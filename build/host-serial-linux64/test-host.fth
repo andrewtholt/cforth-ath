@@ -49,13 +49,20 @@
    /sockaddr sockaddr socket-fd connect  ?posix-err
 ;
 
-create hostname #192 c, #168 c, #10 c, #112 c,
-#2020 constant port
+\ create hostname #192 c, #168 c, #10 c, #124 c,
+\ #9191 constant port
+
+\ create hostname #192 c, #168 c, #10 c, #124 c,
+create hostname #192 c, #168 c, #0 c, #50 c,
+#9191 constant port
 
 : probe-port  ( -- )
    open-socket
    hostname port connect-socket
-   s" I'm talking to myself." socket-fd h-write-file ( actual )
+
+\   s" I'm talking to myself." socket-fd h-write-file ( actual )
+   s" HELP" socket-fd h-write-file ( actual )
+
    pad $100 socket-fd h-read-file  ( actual )
    dup ?posix-err                  ( actual )
    pad swap type                   ( )
