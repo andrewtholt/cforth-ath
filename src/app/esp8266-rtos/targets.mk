@@ -34,7 +34,7 @@ SRC=$(TOPDIR)/src
 
 # Target compiler definitions
 CROSS ?= $(XTGCCPATH)/xtensa-lx106-elf-
-
+CROSS=/home/andrewtholt60/esp/xtensa-lx106-elf/bin/xtensa-lx106-elf-
 TCC=$(CROSS)gcc
 TLD=$(CROSS)ld
 TOBJDUMP=$(CROSS)objdump

@@ -23,7 +23,7 @@ TCC=$(CROSS)gcc
 TLD=$(CROSS)ld
 TOBJDUMP=$(CROSS)objdump
 TOBJCOPY=$(CROSS)objcopy
-
+@echo $(TCC)
 LIBDIRS=-L$(dir $(shell $(TCC) $(TCFLAGS) -print-libgcc-file-name))
 
 VPATH += $(TCPATH)
